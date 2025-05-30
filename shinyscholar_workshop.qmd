@@ -21,15 +21,20 @@ preload-iframes: false
 -   What is Shiny?
 -   Use of Shiny in academia
 -   How Shinyscholar helps to avoid common problems
--   How to use `create_template()`
+-   How to use `create_template()` to make an app
 -   How to develop modules
 
 ## About me
 
 -   Background in plant sciences and agricultural science
--   Software developer in the Biostats group with Tim Lucas
+-   Software developer in the Department of Population Health Sciences at the University of Leicester with Tim Lucas
 -   Latecomer to R, starting in 2018
 -   Quickly fell in love with Shiny
+
+## {data-menu-title="About you"}
+```{=html}
+<iframe width="100%" height="100%" src ="https://wall.sli.do/event/hHaXgfyR5WUSp5R33BzT5W/?section=fd94117a-f537-4081-91a2-4ca9266d4e32"></iframe>
+```
 
 ## Tomvision
 <img src="images/tomvision.png" class="centre_image" >
@@ -38,13 +43,9 @@ preload-iframes: false
 
 ![](images/PYM_home.png)
 
-## Disagapp
+## Disagapp simplifies disaggregation regression [https://disagapp.le.ac.uk/](https://disagapp.le.ac.uk/)
 
 <img src="images/disagapp.png" class="centre_image" >
-
-::: footer
-[https://disagapp.le.ac.uk/](https://disagapp.le.ac.uk/)
-:::
 
 ## Shiny apps are becoming increasingly popular in academia
 
@@ -94,14 +95,6 @@ lines(seq(2012, 2023, 0.1), exp(predict(mod, data.frame(year = seq(2012, 2023, 0
 -   Distinguish between datavis apps and analysis apps
 :::
 
-## App design
-
--  What features do we need?
-    - Generic
-    - Specific
--  How should the code be structured?
--  How do we make sure that it works?
-
 ## What characteristics should academic apps have?
 
 ::: columns
@@ -143,8 +136,7 @@ lines(seq(2012, 2023, 0.1), exp(predict(mod, data.frame(year = seq(2012, 2023, 0
 
 :::
 
-
-## How should app code be structured?
+## There are many ways to structure shiny apps
 
 ::: columns
 ::: {.column width="20%"}
@@ -156,11 +148,11 @@ lines(seq(2012, 2023, 0.1), exp(predict(mod, data.frame(year = seq(2012, 2023, 0
 :::
 :::
 
-## How should app code be structured?
+## There are many ways to structure shiny apps?
 ![](images/ROGUE_input.png)
 ![](images/ROGUE_output.png)
 
-## How should app code be structured?
+## There are many ways to structure shiny apps?
 ::: columns
 ::: {.column width="20%"}
 :::
@@ -242,7 +234,7 @@ lines(seq(2012, 2023, 0.1), exp(predict(mod, data.frame(year = seq(2012, 2023, 0
 -  Removed all the modules
 -  Adapted files so they could be edited programmatically
 
-## New features
+## Various new features have been added since {.mediumtext}
 
 - Updated UI
 - Viewing source code
@@ -264,7 +256,7 @@ lines(seq(2012, 2023, 0.1), exp(predict(mod, data.frame(year = seq(2012, 2023, 0
 -   Each module is reproduced by a markdown chunk
 -   Data is passed between modules through `common`
 
-## 
+## This structure has various advantages
 
 - Modules are self-contained
 - New modules slot in easily
@@ -304,7 +296,7 @@ knitr::kable(modules, format = "html")
 - All set to `NULL` by default 
 - `common$reset()` allows it to be reset
 
-## `common` in Disagapp {.mediumtext}
+## `common` in Disagapp {.smalltext}
 
 ::: columns
 ::: {.column width="33%"}
@@ -356,7 +348,7 @@ demo::run_demo()
 │   └── shiny
 │       ├── common.R                                            Data objects shared between modules
 │       ├── global.R                                            Loads package and modules
-│       ├── helpers.R                                           Functions to create module UI
+│       ├── ui_helpers.R                                        Functions to create module UI
 │       ├── server.R                                            App server
 │       ├── ui.R                                                App UI
 │       ├── modules
@@ -405,10 +397,21 @@ demo::run_demo()
 
 ```
 
-## Shiny modules {.mediumcode .mediumtext}
+## Shiny modules split code into manageable chunks {.mediumcode}
 
-- Splitting code into self-contained chunks makes it easier to manage
-- `input` and `output` IDs are *namespaced*: 
+```{r eval = FALSE, echo = TRUE}
+ui <- fluidPage(
+  load_module_ui("load"),
+  plot_module_ui("plot")
+)
+
+server <- function(input, output, session){
+  load_module_server("load")
+  plot_module_server("plot")
+}
+```
+
+## `input` and `output` IDs are *namespaced* {.mediumcode}
 
 ```{r eval = FALSE, echo = TRUE}
 numericInput("number") 
@@ -419,22 +422,25 @@ plotOutput(ns("plot"))
 numericInput(ns("number"))
 ```
 
-- When used inside a module called `load`, `ns()` appends `load-` to the ID so `load-plot` and `load-number` are created
+- When used inside a module with an id of `load`, `ns()` appends `load-` to the ID so `load-plot` and `load-number` are created
 
-## Shiny modules
-- However, we have to manage:
-  - Sourcing the functions
-  - Calling the functions
-  - Passing data between modules
-  - Reactivity between modules
+## By default though there is a lot to manage:
+- Sourcing the functions
+- Calling the functions
+- Passing data between modules
+- Reactivity between modules
 
-## Each module has several files associated with it {.smalltext}
+::: {.fragment .fade-in}
+- Shinyscholar takes care of all of these!
+:::
+
+## Modules in shinyscholar have a broader definition and several files {.verysmalltext}
 
 - In `R/`:
     -   Function: `<component>_<module>_f.R`
 
-- In `inst/modules/`:
-    -   Module: `<component>_<module>.R`
+- In `inst/shiny/modules/`:
+    -   Shiny module: `<component>_<module>.R`
     -   Rmarkdown: `<component>_<module>.Rmd`
     -   Guidance: `<component>_<module>.md`
     -   Configuration: `<component>_<module>.yml`
@@ -475,7 +481,7 @@ if (is.null(common$raster)) {
 
 ## Module development workflow
 
-<img src="images/disagg_modules_path.svg" class="centre_image" >
+<img src="images/workflow.svg" class="centre_image" >
 
 ## Developing the module function
 
@@ -489,16 +495,15 @@ if (is.null(common$raster)) {
 - `<identifier>_module_ui()` - user inputs
 - `<identifier>_module_server()` - server function
 
-- Optional:
-  - `<identifier>_module_result()` - display outputs
-  - `<identifier>_module_map()` - modify the map
-  - `<identifier>_module_rmd()` - transfer data to rmarkdown
+- Optionally:
+- `<identifier>_module_result()` - display outputs
+- `<identifier>_module_map()` - modify the map
+- `<identifier>_module_rmd()` - transfer data to rmarkdown
 
-## Module UI {.mediumcode}
+## Only Input functions are included in the module UI {.mediumcode .mediumtext}
 
-- Just as you would develop a normal shiny UI apart from:
 - Input IDs need wrapping in `ns()`
-- Only inputs are included 
+- Everything is wrapped in `tagList`
 
 ```{r echo = TRUE, eval = FALSE}
 plot_hist_module_ui <- function(id) {
@@ -515,8 +520,7 @@ plot_hist_module_ui <- function(id) {
 
 <img src="images/input_sidebar.png" >
 
-
-## The server contains an `observeEvent()` triggered by `input$run` {.mediumtext}
+## The server contains an `observeEvent()` triggered by `input$run` {.mediumtext .smallheader}
 
 - Inputs are checked and any errors logged
 - Inputs are passed to the module function 
@@ -525,22 +529,24 @@ plot_hist_module_ui <- function(id) {
 - Use `trigger()` to run anything that relies on the results
 - Use `show_map()` or `show_results()` to change the view
 
-## The server contains an `observeEvent()` triggered by `input$run` {.mediumcode}
+## The server contains an `observeEvent()` triggered by `input$run` {.mediumcode .smallheader}
 
 ```{r echo = TRUE, eval = FALSE}
   observeEvent(input$run, {
     # WARNING ####
     if (is.null(common$raster)) {
-      common$logger %>% writeLog(type = "error", "Please load a raster file")
+      common$logger |> writeLog(type = "error", "Please load a raster file")
       return()
     }
     # FUNCTION CALL ####
-    histogram <- plot_hist(common$raster, as.numeric(input$bins))
+    raster_name <- c(common$meta$select_query$name, common$meta$select_async$name, common$meta$select_user$name)
+    histogram <- plot_hist(common$raster, as.numeric(input$bins), input$pal, raster_name, common$logger)
     # LOAD INTO COMMON ####
     common$histogram <- histogram
     # METADATA ####
     common$meta$plot_hist$bins <- as.numeric(input$bins)
     common$meta$plot_hist$pal <- input$pal
+    common$meta$plot_hist$name <- raster_name
     # TRIGGER ####
     trigger("plot_hist")
     show_results(parent_session)
@@ -587,7 +593,7 @@ plot_hist_module_result <- function(id) {
 - The structure is different since starting the task and dealing with the results are separate
 - The number of currently running tasks is shown under the logger
 
-## The normal logger can't be accessed from inside async tasks {.mediumcode}
+## The normal logger can't be accessed from inside async tasks {.mediumtext .mediumcode}
  
 - `asyncLog()` is similar to `writeLog()` but can be used inside async functions
 - Use `async = FALSE` as the last parameter instead of `logger = NULL` 
@@ -599,10 +605,10 @@ plot_hist_module_result <- function(id) {
   }
 ```
 
-## Listen for messages in the server and then pass to the logger {.mediumcode}
+## We can listen for messages in the server and then pass to the logger {.mediumcode}
 ```{r  eval = FALSE, echo = TRUE}
     if (class(result) == "list"){ # whatever the successful class is
-      # do stuff
+      common$raster <- result
     } else {
       common$logger %>% writeLog(type = "error", result)
     }
@@ -610,7 +616,7 @@ plot_hist_module_result <- function(id) {
 
 ## Saving and loading
 
-- When the app is saved, `common` is saved to and `.Rds` 
+- When the app is saved, `common` is saved to an `.Rds` 
 - Each module's input values are stored in `common$state`
 - Distinct from those stored in `common$meta` which are only for modules that have been run
 
@@ -626,7 +632,9 @@ plot_hist_module_result <- function(id) {
 - We can load `common` in an rmarkdown and use the exact data used in the app
 - Set `load_file_path` to point to a save file and it will be loaded automatically 
 
-## `save_and_load()` takes care of tedious coding
+## `save_and_load()` takes care of tedious coding {.mediumcode}
+
+- Currently only `{shiny}` inputs are supported
 
 ```{r echo = TRUE, eval = FALSE}
 save_and_load(".") # for all modules
@@ -649,7 +657,7 @@ updateNumericInput(session, "number", state$number) # load
 
 ```{r eval = FALSE, echo = TRUE}
 #```{r, echo = {{select_query_knit}}, include = {{select_query_knit}}}
-poly <- matrix({{select_query_poly}}, ncol = 2, byrow = FALSE)
+poly <- {{select_query_poly}}
 token <- {{select_query_token}}
 ras <- select_query(poly, {{select_query_date}}, token)
 raster_name <- {{select_query_name}}
@@ -667,7 +675,7 @@ raster_name <- "FAPAR"
 #```
 ```
 
-## You can also just add data directly to the markdown
+## You can also just add data directly to the markdown {.mediumtext}
 
 - If the output of a module is a small dataframe (~ 1000 values) then you can insert that straight into the markdown
 - Especially useful if files are uploaded as that can't be reproduced entirely automatically

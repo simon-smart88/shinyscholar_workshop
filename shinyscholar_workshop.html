@@ -413,7 +413,7 @@ Simon Smart
 <li>What is Shiny?</li>
 <li>Use of Shiny in academia</li>
 <li>How Shinyscholar helps to avoid common problems</li>
-<li>How to use <code>create_template()</code></li>
+<li>How to use <code>create_template()</code> to make an app</li>
 <li>How to develop modules</li>
 </ul>
 </section>
@@ -421,10 +421,14 @@ Simon Smart
 <h2>About me</h2>
 <ul>
 <li>Background in plant sciences and agricultural science</li>
-<li>Software developer in the Biostats group with Tim Lucas</li>
+<li>Software developer in the Department of Population Health Sciences at the University of Leicester with Tim Lucas</li>
 <li>Latecomer to R, starting in 2018</li>
 <li>Quickly fell in love with Shiny</li>
 </ul>
+</section>
+<section id="section" class="slide level2" data-menu-title="About you">
+<h2></h2>
+<iframe width="100%" height="100%" src="https://wall.sli.do/event/hHaXgfyR5WUSp5R33BzT5W/?section=fd94117a-f537-4081-91a2-4ca9266d4e32"></iframe>
 </section>
 <section id="tomvision" class="slide level2">
 <h2>Tomvision</h2>
@@ -434,13 +438,10 @@ Simon Smart
 <h2>Potato Yield Model Dashboard</h2>
 
 <img data-src="images/PYM_home.png" class="r-stretch"></section>
-<section id="disagapp" class="slide level2">
-<h2>Disagapp</h2>
+<section id="disagapp-simplifies-disaggregation-regression-httpsdisagapp.le.ac.uk" class="slide level2">
+<h2>Disagapp simplifies disaggregation regression <a href="https://disagapp.le.ac.uk/">https://disagapp.le.ac.uk/</a></h2>
 
-<img src="images/disagapp.png" class="centre_image r-stretch"><div class="footer">
-<p><a href="https://disagapp.le.ac.uk/">https://disagapp.le.ac.uk/</a></p>
-</div>
-</section>
+<img src="images/disagapp.png" class="centre_image r-stretch"></section>
 <section id="shiny-apps-are-becoming-increasingly-popular-in-academia" class="slide level2">
 <h2>Shiny apps are becoming increasingly popular in academia</h2>
 <div class="columns">
@@ -512,18 +513,6 @@ Simon Smart
           display:block!important;
       }</style></aside>
 </section>
-<section id="app-design" class="slide level2">
-<h2>App design</h2>
-<ul>
-<li>What features do we need?
-<ul>
-<li>Generic</li>
-<li>Specific</li>
-</ul></li>
-<li>How should the code be structured?</li>
-<li>How do we make sure that it works?</li>
-</ul>
-</section>
 <section id="what-characteristics-should-academic-apps-have" class="slide level2">
 <h2>What characteristics should academic apps have?</h2>
 <div class="columns">
@@ -582,8 +571,8 @@ Simon Smart
           display:block!important;
       }</style></aside>
 </section>
-<section id="how-should-app-code-be-structured" class="slide level2">
-<h2>How should app code be structured?</h2>
+<section id="there-are-many-ways-to-structure-shiny-apps" class="slide level2">
+<h2>There are many ways to structure shiny apps</h2>
 <div class="columns">
 <div class="column" style="width:20%;">
 
@@ -593,12 +582,12 @@ Simon Smart
 </div>
 </div></div>
 </section>
-<section id="how-should-app-code-be-structured-1" class="slide level2">
-<h2>How should app code be structured?</h2>
+<section id="there-are-many-ways-to-structure-shiny-apps-1" class="slide level2">
+<h2>There are many ways to structure shiny apps?</h2>
 <p><img data-src="images/ROGUE_input.png"> <img data-src="images/ROGUE_output.png"></p>
 </section>
-<section id="how-should-app-code-be-structured-2" class="slide level2">
-<h2>How should app code be structured?</h2>
+<section id="there-are-many-ways-to-structure-shiny-apps-2" class="slide level2">
+<h2>There are many ways to structure shiny apps?</h2>
 <div class="columns">
 <div class="column" style="width:20%;">
 
@@ -696,8 +685,8 @@ Simon Smart
 <li>Adapted files so they could be edited programmatically</li>
 </ul>
 </section>
-<section id="new-features" class="slide level2">
-<h2>New features</h2>
+<section id="various-new-features-have-been-added-since" class="slide level2 mediumtext">
+<h2>Various new features have been added since</h2>
 <ul>
 <li>Updated UI</li>
 <li>Viewing source code</li>
@@ -724,8 +713,8 @@ Simon Smart
 <li>Data is passed between modules through <code>common</code></li>
 </ul>
 </section>
-<section id="section" class="slide level2">
-<h2></h2>
+<section id="this-structure-has-various-advantages" class="slide level2">
+<h2>This structure has various advantages</h2>
 <ul>
 <li>Modules are self-contained</li>
 <li>New modules slot in easily</li>
@@ -821,7 +810,7 @@ Simon Smart
 <li><code>common$reset()</code> allows it to be reset</li>
 </ul>
 </section>
-<section id="common-in-disagapp" class="slide level2 mediumtext">
+<section id="common-in-disagapp" class="slide level2 smalltext">
 <h2><code>common</code> in Disagapp</h2>
 <div class="columns">
 <div class="column" style="width:33%;">
@@ -873,7 +862,7 @@ Simon Smart
 │   └── shiny
 │       ├── common.R                                            Data objects shared between modules
 │       ├── global.R                                            Loads package and modules
-│       ├── helpers.R                                           Functions to create module UI
+│       ├── ui_helpers.R                                        Functions to create module UI
 │       ├── server.R                                            App server
 │       ├── ui.R                                                App UI
 │       ├── modules
@@ -921,46 +910,58 @@ Simon Smart
         └── test-plot_scatter.R
 </code></pre>
 </section>
-<section id="shiny-modules" class="slide level2 mediumcode mediumtext">
-<h2>Shiny modules</h2>
-<ul>
-<li>Splitting code into self-contained chunks makes it easier to manage</li>
-<li><code>input</code> and <code>output</code> IDs are <em>namespaced</em>:</li>
-</ul>
+<section id="shiny-modules-split-code-into-manageable-chunks" class="slide level2 mediumcode">
+<h2>Shiny modules split code into manageable chunks</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">numericInput</span>(<span class="st">"number"</span>) </span>
-<span id="cb3-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">plotOutput</span>(<span class="st">"plot"</span>) </span>
-<span id="cb3-3"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="" aria-hidden="true" tabindex="-1"></a>ns <span class="ot">&lt;-</span> <span class="fu">NS</span>(id)</span>
-<span id="cb3-5"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">plotOutput</span>(<span class="fu">ns</span>(<span class="st">"plot"</span>))</span>
-<span id="cb3-6"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">numericInput</span>(<span class="fu">ns</span>(<span class="st">"number"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="" aria-hidden="true" tabindex="-1"></a>ui <span class="ot">&lt;-</span> <span class="fu">fluidPage</span>(</span>
+<span id="cb3-2"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">load_module_ui</span>(<span class="st">"load"</span>),</span>
+<span id="cb3-3"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_module_ui</span>(<span class="st">"plot"</span>)</span>
+<span id="cb3-4"><a href="" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-5"><a href="" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="" aria-hidden="true" tabindex="-1"></a>server <span class="ot">&lt;-</span> <span class="cf">function</span>(input, output, session){</span>
+<span id="cb3-7"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">load_module_server</span>(<span class="st">"load"</span>)</span>
+<span id="cb3-8"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_module_server</span>(<span class="st">"plot"</span>)</span>
+<span id="cb3-9"><a href="" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="input-and-output-ids-are-namespaced" class="slide level2 mediumcode">
+<h2><code>input</code> and <code>output</code> IDs are <em>namespaced</em></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">numericInput</span>(<span class="st">"number"</span>) </span>
+<span id="cb4-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">plotOutput</span>(<span class="st">"plot"</span>) </span>
+<span id="cb4-3"><a href="" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="" aria-hidden="true" tabindex="-1"></a>ns <span class="ot">&lt;-</span> <span class="fu">NS</span>(id)</span>
+<span id="cb4-5"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">plotOutput</span>(<span class="fu">ns</span>(<span class="st">"plot"</span>))</span>
+<span id="cb4-6"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">numericInput</span>(<span class="fu">ns</span>(<span class="st">"number"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
-<li>When used inside a module called <code>load</code>, <code>ns()</code> appends <code>load-</code> to the ID so <code>load-plot</code> and <code>load-number</code> are created</li>
+<li>When used inside a module with an id of <code>load</code>, <code>ns()</code> appends <code>load-</code> to the ID so <code>load-plot</code> and <code>load-number</code> are created</li>
 </ul>
 </section>
-<section id="shiny-modules-1" class="slide level2">
-<h2>Shiny modules</h2>
-<ul>
-<li>However, we have to manage:
+<section id="by-default-though-there-is-a-lot-to-manage" class="slide level2">
+<h2>By default though there is a lot to manage:</h2>
 <ul>
 <li>Sourcing the functions</li>
 <li>Calling the functions</li>
 <li>Passing data between modules</li>
 <li>Reactivity between modules</li>
-</ul></li>
 </ul>
+<div class="fragment fade-in">
+<ul>
+<li>Shinyscholar takes care of all of these!</li>
+</ul>
+</div>
 </section>
-<section id="each-module-has-several-files-associated-with-it" class="slide level2 smalltext">
-<h2>Each module has several files associated with it</h2>
+<section id="modules-in-shinyscholar-have-a-broader-definition-and-several-files" class="slide level2 verysmalltext">
+<h2>Modules in shinyscholar have a broader definition and several files</h2>
 <ul>
 <li>In <code>R/</code>:
 <ul>
 <li>Function: <code>&lt;component&gt;_&lt;module&gt;_f.R</code></li>
 </ul></li>
-<li>In <code>inst/modules/</code>:
+<li>In <code>inst/shiny/modules/</code>:
 <ul>
-<li>Module: <code>&lt;component&gt;_&lt;module&gt;.R</code></li>
+<li>Shiny module: <code>&lt;component&gt;_&lt;module&gt;.R</code></li>
 <li>Rmarkdown: <code>&lt;component&gt;_&lt;module&gt;.Rmd</code></li>
 <li>Guidance: <code>&lt;component&gt;_&lt;module&gt;.md</code></li>
 <li>Configuration: <code>&lt;component&gt;_&lt;module&gt;.yml</code></li>
@@ -978,10 +979,10 @@ Simon Smart
 <li>Either from inside the module function or the module server function</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">is.null</span>(common<span class="sc">$</span>raster)) {</span>
-<span id="cb4-2"><a href="" aria-hidden="true" tabindex="-1"></a>  common<span class="sc">$</span>logger <span class="sc">|&gt;</span> <span class="fu">writeLog</span>(<span class="at">type =</span> <span class="st">"error"</span>, <span class="st">"Please load a raster file"</span>)</span>
-<span id="cb4-3"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>()</span>
-<span id="cb4-4"><a href="" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">is.null</span>(common<span class="sc">$</span>raster)) {</span>
+<span id="cb5-2"><a href="" aria-hidden="true" tabindex="-1"></a>  common<span class="sc">$</span>logger <span class="sc">|&gt;</span> <span class="fu">writeLog</span>(<span class="at">type =</span> <span class="st">"error"</span>, <span class="st">"Please load a raster file"</span>)</span>
+<span id="cb5-3"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>()</span>
+<span id="cb5-4"><a href="" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="the-logging-system-provides-a-flexible-way-to-inform-users-1" class="slide level2 mediumtext">
@@ -1012,7 +1013,7 @@ Simon Smart
 <section id="module-development-workflow" class="slide level2">
 <h2>Module development workflow</h2>
 
-<img src="images/disagg_modules_path.svg" class="centre_image r-stretch"></section>
+<img src="images/workflow.svg" class="centre_image r-stretch"></section>
 <section id="developing-the-module-function" class="slide level2">
 <h2>Developing the module function</h2>
 <ul>
@@ -1027,37 +1028,34 @@ Simon Smart
 <ul>
 <li><p><code>&lt;identifier&gt;_module_ui()</code> - user inputs</p></li>
 <li><p><code>&lt;identifier&gt;_module_server()</code> - server function</p></li>
-<li><p>Optional:</p>
-<ul>
-<li><code>&lt;identifier&gt;_module_result()</code> - display outputs</li>
-<li><code>&lt;identifier&gt;_module_map()</code> - modify the map</li>
-<li><code>&lt;identifier&gt;_module_rmd()</code> - transfer data to rmarkdown</li>
-</ul></li>
+<li><p>Optionally:</p></li>
+<li><p><code>&lt;identifier&gt;_module_result()</code> - display outputs</p></li>
+<li><p><code>&lt;identifier&gt;_module_map()</code> - modify the map</p></li>
+<li><p><code>&lt;identifier&gt;_module_rmd()</code> - transfer data to rmarkdown</p></li>
 </ul>
 </section>
-<section id="module-ui" class="slide level2 mediumcode">
-<h2>Module UI</h2>
+<section id="only-input-functions-are-included-in-the-module-ui" class="slide level2 mediumcode mediumtext">
+<h2>Only Input functions are included in the module UI</h2>
 <ul>
-<li>Just as you would develop a normal shiny UI apart from:</li>
 <li>Input IDs need wrapping in <code>ns()</code></li>
-<li>Only inputs are included</li>
+<li>Everything is wrapped in <code>tagList</code></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="" aria-hidden="true" tabindex="-1"></a>plot_hist_module_ui <span class="ot">&lt;-</span> <span class="cf">function</span>(id) {</span>
-<span id="cb5-2"><a href="" aria-hidden="true" tabindex="-1"></a>  ns <span class="ot">&lt;-</span> <span class="fu">NS</span>(id)</span>
-<span id="cb5-3"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tagList</span>(</span>
-<span id="cb5-4"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="fu">selectInput</span>(<span class="fu">ns</span>(<span class="st">"bins"</span>), <span class="st">"Number of bins"</span>, <span class="at">choices =</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">50</span>, <span class="dv">100</span>)),</span>
-<span id="cb5-5"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="fu">selectInput</span>(<span class="fu">ns</span>(<span class="st">"pal"</span>), <span class="st">"Colour palette"</span>, <span class="at">choices =</span> <span class="fu">c</span>(<span class="st">"Greens"</span>, <span class="st">"YlOrRd"</span>, <span class="st">"Greys"</span>, <span class="st">"Blues"</span>)),</span>
-<span id="cb5-6"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="fu">actionButton</span>(<span class="fu">ns</span>(<span class="st">"run"</span>), <span class="st">"Plot histogram"</span>)</span>
-<span id="cb5-7"><a href="" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb5-8"><a href="" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="" aria-hidden="true" tabindex="-1"></a>plot_hist_module_ui <span class="ot">&lt;-</span> <span class="cf">function</span>(id) {</span>
+<span id="cb6-2"><a href="" aria-hidden="true" tabindex="-1"></a>  ns <span class="ot">&lt;-</span> <span class="fu">NS</span>(id)</span>
+<span id="cb6-3"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tagList</span>(</span>
+<span id="cb6-4"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="fu">selectInput</span>(<span class="fu">ns</span>(<span class="st">"bins"</span>), <span class="st">"Number of bins"</span>, <span class="at">choices =</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">50</span>, <span class="dv">100</span>)),</span>
+<span id="cb6-5"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="fu">selectInput</span>(<span class="fu">ns</span>(<span class="st">"pal"</span>), <span class="st">"Colour palette"</span>, <span class="at">choices =</span> <span class="fu">c</span>(<span class="st">"Greens"</span>, <span class="st">"YlOrRd"</span>, <span class="st">"Greys"</span>, <span class="st">"Blues"</span>)),</span>
+<span id="cb6-6"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="fu">actionButton</span>(<span class="fu">ns</span>(<span class="st">"run"</span>), <span class="st">"Plot histogram"</span>)</span>
+<span id="cb6-7"><a href="" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb6-8"><a href="" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="input-widgets-are-inserted-to-the-sidebar" class="slide level2">
 <h2>Input widgets are inserted to the sidebar</h2>
 
 <img src="images/input_sidebar.png" class="r-stretch"></section>
-<section id="the-server-contains-an-observeevent-triggered-by-inputrun" class="slide level2 mediumtext">
+<section id="the-server-contains-an-observeevent-triggered-by-inputrun" class="slide level2 mediumtext smallheader">
 <h2>The server contains an <code>observeEvent()</code> triggered by <code>input$run</code></h2>
 <ul>
 <li>Inputs are checked and any errors logged</li>
@@ -1068,46 +1066,48 @@ Simon Smart
 <li>Use <code>show_map()</code> or <code>show_results()</code> to change the view</li>
 </ul>
 </section>
-<section id="the-server-contains-an-observeevent-triggered-by-inputrun-1" class="slide level2 mediumcode">
+<section id="the-server-contains-an-observeevent-triggered-by-inputrun-1" class="slide level2 mediumcode smallheader">
 <h2>The server contains an <code>observeEvent()</code> triggered by <code>input$run</code></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">observeEvent</span>(input<span class="sc">$</span>run, {</span>
-<span id="cb6-2"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="co"># </span><span class="al">WARNING</span><span class="co"> ####</span></span>
-<span id="cb6-3"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">is.null</span>(common<span class="sc">$</span>raster)) {</span>
-<span id="cb6-4"><a href="" aria-hidden="true" tabindex="-1"></a>      common<span class="sc">$</span>logger <span class="sc">%&gt;%</span> <span class="fu">writeLog</span>(<span class="at">type =</span> <span class="st">"error"</span>, <span class="st">"Please load a raster file"</span>)</span>
-<span id="cb6-5"><a href="" aria-hidden="true" tabindex="-1"></a>      <span class="fu">return</span>()</span>
-<span id="cb6-6"><a href="" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb6-7"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="co"># FUNCTION CALL ####</span></span>
-<span id="cb6-8"><a href="" aria-hidden="true" tabindex="-1"></a>    histogram <span class="ot">&lt;-</span> <span class="fu">plot_hist</span>(common<span class="sc">$</span>raster, <span class="fu">as.numeric</span>(input<span class="sc">$</span>bins))</span>
-<span id="cb6-9"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="co"># LOAD INTO COMMON ####</span></span>
-<span id="cb6-10"><a href="" aria-hidden="true" tabindex="-1"></a>    common<span class="sc">$</span>histogram <span class="ot">&lt;-</span> histogram</span>
-<span id="cb6-11"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="co"># METADATA ####</span></span>
-<span id="cb6-12"><a href="" aria-hidden="true" tabindex="-1"></a>    common<span class="sc">$</span>meta<span class="sc">$</span>plot_hist<span class="sc">$</span>bins <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(input<span class="sc">$</span>bins)</span>
-<span id="cb6-13"><a href="" aria-hidden="true" tabindex="-1"></a>    common<span class="sc">$</span>meta<span class="sc">$</span>plot_hist<span class="sc">$</span>pal <span class="ot">&lt;-</span> input<span class="sc">$</span>pal</span>
-<span id="cb6-14"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="co"># TRIGGER ####</span></span>
-<span id="cb6-15"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="fu">trigger</span>(<span class="st">"plot_hist"</span>)</span>
-<span id="cb6-16"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="fu">show_results</span>(parent_session)</span>
-<span id="cb6-17"><a href="" aria-hidden="true" tabindex="-1"></a>    shinyjs<span class="sc">::</span><span class="fu">show</span>(<span class="st">"download"</span>)</span>
-<span id="cb6-18"><a href="" aria-hidden="true" tabindex="-1"></a>  })</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">observeEvent</span>(input<span class="sc">$</span>run, {</span>
+<span id="cb7-2"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="co"># </span><span class="al">WARNING</span><span class="co"> ####</span></span>
+<span id="cb7-3"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">is.null</span>(common<span class="sc">$</span>raster)) {</span>
+<span id="cb7-4"><a href="" aria-hidden="true" tabindex="-1"></a>      common<span class="sc">$</span>logger <span class="sc">|&gt;</span> <span class="fu">writeLog</span>(<span class="at">type =</span> <span class="st">"error"</span>, <span class="st">"Please load a raster file"</span>)</span>
+<span id="cb7-5"><a href="" aria-hidden="true" tabindex="-1"></a>      <span class="fu">return</span>()</span>
+<span id="cb7-6"><a href="" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb7-7"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="co"># FUNCTION CALL ####</span></span>
+<span id="cb7-8"><a href="" aria-hidden="true" tabindex="-1"></a>    raster_name <span class="ot">&lt;-</span> <span class="fu">c</span>(common<span class="sc">$</span>meta<span class="sc">$</span>select_query<span class="sc">$</span>name, common<span class="sc">$</span>meta<span class="sc">$</span>select_async<span class="sc">$</span>name, common<span class="sc">$</span>meta<span class="sc">$</span>select_user<span class="sc">$</span>name)</span>
+<span id="cb7-9"><a href="" aria-hidden="true" tabindex="-1"></a>    histogram <span class="ot">&lt;-</span> <span class="fu">plot_hist</span>(common<span class="sc">$</span>raster, <span class="fu">as.numeric</span>(input<span class="sc">$</span>bins), input<span class="sc">$</span>pal, raster_name, common<span class="sc">$</span>logger)</span>
+<span id="cb7-10"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="co"># LOAD INTO COMMON ####</span></span>
+<span id="cb7-11"><a href="" aria-hidden="true" tabindex="-1"></a>    common<span class="sc">$</span>histogram <span class="ot">&lt;-</span> histogram</span>
+<span id="cb7-12"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="co"># METADATA ####</span></span>
+<span id="cb7-13"><a href="" aria-hidden="true" tabindex="-1"></a>    common<span class="sc">$</span>meta<span class="sc">$</span>plot_hist<span class="sc">$</span>bins <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(input<span class="sc">$</span>bins)</span>
+<span id="cb7-14"><a href="" aria-hidden="true" tabindex="-1"></a>    common<span class="sc">$</span>meta<span class="sc">$</span>plot_hist<span class="sc">$</span>pal <span class="ot">&lt;-</span> input<span class="sc">$</span>pal</span>
+<span id="cb7-15"><a href="" aria-hidden="true" tabindex="-1"></a>    common<span class="sc">$</span>meta<span class="sc">$</span>plot_hist<span class="sc">$</span>name <span class="ot">&lt;-</span> raster_name</span>
+<span id="cb7-16"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="co"># TRIGGER ####</span></span>
+<span id="cb7-17"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="fu">trigger</span>(<span class="st">"plot_hist"</span>)</span>
+<span id="cb7-18"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="fu">show_results</span>(parent_session)</span>
+<span id="cb7-19"><a href="" aria-hidden="true" tabindex="-1"></a>    shinyjs<span class="sc">::</span><span class="fu">show</span>(<span class="st">"download"</span>)</span>
+<span id="cb7-20"><a href="" aria-hidden="true" tabindex="-1"></a>  })</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="outputs-are-triggered-when-the-module-runs-successfully" class="slide level2 mediumcode">
 <h2>Outputs are triggered when the module runs successfully</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="" aria-hidden="true" tabindex="-1"></a>output<span class="sc">$</span>hist <span class="ot">&lt;-</span> <span class="fu">renderPlot</span>({</span>
-<span id="cb7-2"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">watch</span>(<span class="st">"plot_hist"</span>)</span>
-<span id="cb7-3"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">req</span>(common<span class="sc">$</span>histogram)</span>
-<span id="cb7-4"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(common<span class="sc">$</span>histogram, <span class="at">freq =</span> <span class="cn">FALSE</span>, <span class="at">main =</span> <span class="st">""</span>, <span class="at">xlab =</span> common<span class="sc">$</span>meta<span class="sc">$</span>plot_hist<span class="sc">$</span>name, <span class="at">ylab =</span> <span class="st">"Frequency (%)"</span>)</span>
-<span id="cb7-5"><a href="" aria-hidden="true" tabindex="-1"></a>  })</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="" aria-hidden="true" tabindex="-1"></a>output<span class="sc">$</span>hist <span class="ot">&lt;-</span> <span class="fu">renderPlot</span>({</span>
+<span id="cb8-2"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">watch</span>(<span class="st">"plot_hist"</span>)</span>
+<span id="cb8-3"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">req</span>(common<span class="sc">$</span>histogram)</span>
+<span id="cb8-4"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(common<span class="sc">$</span>histogram, <span class="at">freq =</span> <span class="cn">FALSE</span>, <span class="at">main =</span> <span class="st">""</span>, <span class="at">xlab =</span> common<span class="sc">$</span>meta<span class="sc">$</span>plot_hist<span class="sc">$</span>name, <span class="at">ylab =</span> <span class="st">"Frequency (%)"</span>)</span>
+<span id="cb8-5"><a href="" aria-hidden="true" tabindex="-1"></a>  })</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="outputs-are-inserted-into-the-results-tab" class="slide level2 mediumcode">
 <h2>Outputs are inserted into the results tab</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="" aria-hidden="true" tabindex="-1"></a>plot_hist_module_result <span class="ot">&lt;-</span> <span class="cf">function</span>(id) {</span>
-<span id="cb8-2"><a href="" aria-hidden="true" tabindex="-1"></a>  ns <span class="ot">&lt;-</span> <span class="fu">NS</span>(id)</span>
-<span id="cb8-3"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plotOutput</span>(<span class="fu">ns</span>(<span class="st">"hist"</span>))</span>
-<span id="cb8-4"><a href="" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="" aria-hidden="true" tabindex="-1"></a>plot_hist_module_result <span class="ot">&lt;-</span> <span class="cf">function</span>(id) {</span>
+<span id="cb9-2"><a href="" aria-hidden="true" tabindex="-1"></a>  ns <span class="ot">&lt;-</span> <span class="fu">NS</span>(id)</span>
+<span id="cb9-3"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plotOutput</span>(<span class="fu">ns</span>(<span class="st">"hist"</span>))</span>
+<span id="cb9-4"><a href="" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="asynchronous-modules" class="slide level2">
@@ -1132,7 +1132,7 @@ Simon Smart
 <li>The number of currently running tasks is shown under the logger</li>
 </ul>
 </section>
-<section id="the-normal-logger-cant-be-accessed-from-inside-async-tasks" class="slide level2 mediumcode">
+<section id="the-normal-logger-cant-be-accessed-from-inside-async-tasks" class="slide level2 mediumtext mediumcode">
 <h2>The normal logger can’t be accessed from inside async tasks</h2>
 <ul>
 <li><code>asyncLog()</code> is similar to <code>writeLog()</code> but can be used inside async functions</li>
@@ -1140,25 +1140,25 @@ Simon Smart
 <li><code>return(async %&gt;% asyncLog("message))</code> sends errors back</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.character</span>(date) <span class="sc">||</span> <span class="fu">is.na</span>(<span class="fu">as.Date</span>(date, <span class="at">format =</span> <span class="st">"%Y-%m-%d"</span>))) {</span>
-<span id="cb9-2"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(async <span class="sc">%&gt;%</span> <span class="fu">asyncLog</span>(<span class="at">type =</span> <span class="st">"error"</span>, <span class="st">"date must be a string with the format YYYY-MM-DD"</span>))</span>
-<span id="cb9-3"><a href="" aria-hidden="true" tabindex="-1"></a>  }</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.character</span>(date) <span class="sc">||</span> <span class="fu">is.na</span>(<span class="fu">as.Date</span>(date, <span class="at">format =</span> <span class="st">"%Y-%m-%d"</span>))) {</span>
+<span id="cb10-2"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(async <span class="sc">%&gt;%</span> <span class="fu">asyncLog</span>(<span class="at">type =</span> <span class="st">"error"</span>, <span class="st">"date must be a string with the format YYYY-MM-DD"</span>))</span>
+<span id="cb10-3"><a href="" aria-hidden="true" tabindex="-1"></a>  }</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="listen-for-messages-in-the-server-and-then-pass-to-the-logger" class="slide level2 mediumcode">
-<h2>Listen for messages in the server and then pass to the logger</h2>
+<section id="we-can-listen-for-messages-in-the-server-and-then-pass-to-the-logger" class="slide level2 mediumcode">
+<h2>We can listen for messages in the server and then pass to the logger</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">class</span>(result) <span class="sc">==</span> <span class="st">"list"</span>){ <span class="co"># whatever the successful class is</span></span>
-<span id="cb10-2"><a href="" aria-hidden="true" tabindex="-1"></a>      <span class="co"># do stuff</span></span>
-<span id="cb10-3"><a href="" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
-<span id="cb10-4"><a href="" aria-hidden="true" tabindex="-1"></a>      common<span class="sc">$</span>logger <span class="sc">%&gt;%</span> <span class="fu">writeLog</span>(<span class="at">type =</span> <span class="st">"error"</span>, result)</span>
-<span id="cb10-5"><a href="" aria-hidden="true" tabindex="-1"></a>    }</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">class</span>(result) <span class="sc">==</span> <span class="st">"list"</span>){ <span class="co"># whatever the successful class is</span></span>
+<span id="cb11-2"><a href="" aria-hidden="true" tabindex="-1"></a>      common<span class="sc">$</span>raster <span class="ot">&lt;-</span> result</span>
+<span id="cb11-3"><a href="" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb11-4"><a href="" aria-hidden="true" tabindex="-1"></a>      common<span class="sc">$</span>logger <span class="sc">%&gt;%</span> <span class="fu">writeLog</span>(<span class="at">type =</span> <span class="st">"error"</span>, result)</span>
+<span id="cb11-5"><a href="" aria-hidden="true" tabindex="-1"></a>    }</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="saving-and-loading" class="slide level2">
 <h2>Saving and loading</h2>
 <ul>
-<li>When the app is saved, <code>common</code> is saved to and <code>.Rds</code></li>
+<li>When the app is saved, <code>common</code> is saved to an <code>.Rds</code></li>
 <li>Each module’s input values are stored in <code>common$state</code></li>
 <li>Distinct from those stored in <code>common$meta</code> which are only for modules that have been run</li>
 </ul>
@@ -1179,16 +1179,16 @@ Simon Smart
 <li>Set <code>load_file_path</code> to point to a save file and it will be loaded automatically</li>
 </ul>
 </section>
-<section id="save_and_load-takes-care-of-tedious-coding" class="slide level2">
+<section id="save_and_load-takes-care-of-tedious-coding" class="slide level2 mediumcode">
 <h2><code>save_and_load()</code> takes care of tedious coding</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">save_and_load</span>(<span class="st">"."</span>) <span class="co"># for all modules</span></span>
-<span id="cb11-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">save_and_load</span>(<span class="st">"."</span>, <span class="at">module =</span> <span class="st">"component_module"</span>) <span class="co"># for a single module</span></span>
-<span id="cb11-3"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-4"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">numericInput</span>(<span class="fu">ns</span>(<span class="st">"number"</span>), <span class="st">"Enter a number"</span>, <span class="at">value =</span> <span class="dv">5</span>)</span>
-<span id="cb11-5"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-6"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(<span class="at">number =</span> input<span class="sc">$</span>number) <span class="co"># save</span></span>
-<span id="cb11-7"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">updateNumericInput</span>(session, <span class="st">"number"</span>, state<span class="sc">$</span>number) <span class="co"># load</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">save_and_load</span>(<span class="st">"."</span>) <span class="co"># for all modules</span></span>
+<span id="cb12-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">save_and_load</span>(<span class="st">"."</span>, <span class="at">module =</span> <span class="st">"component_module"</span>) <span class="co"># for a single module</span></span>
+<span id="cb12-3"><a href="" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">numericInput</span>(<span class="fu">ns</span>(<span class="st">"number"</span>), <span class="st">"Enter a number"</span>, <span class="at">value =</span> <span class="dv">5</span>)</span>
+<span id="cb12-5"><a href="" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-6"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(<span class="at">number =</span> input<span class="sc">$</span>number) <span class="co"># save</span></span>
+<span id="cb12-7"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">updateNumericInput</span>(session, <span class="st">"number"</span>, state<span class="sc">$</span>number) <span class="co"># load</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="markdown-files-can-be-merged-to-replicate-the-analysis" class="slide level2">
@@ -1203,26 +1203,26 @@ Simon Smart
 <section id="input-values-are-copied-into-the-rmarkdown" class="slide level2 mediumcode">
 <h2>Input values are copied into the rmarkdown</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co">#```{r, echo = {{select_query_knit}}, include = {{select_query_knit</span><span class="re">}}}</span></span>
-<span id="cb12-2"><a href="" aria-hidden="true" tabindex="-1"></a>poly <span class="ot">&lt;-</span> <span class="fu">matrix</span>({{select_query_poly}}, <span class="at">ncol =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb12-3"><a href="" aria-hidden="true" tabindex="-1"></a>token <span class="ot">&lt;-</span> {{select_query_token}}</span>
-<span id="cb12-4"><a href="" aria-hidden="true" tabindex="-1"></a>ras <span class="ot">&lt;-</span> <span class="fu">select_query</span>(poly, {{select_query_date}}, token)</span>
-<span id="cb12-5"><a href="" aria-hidden="true" tabindex="-1"></a>raster_name <span class="ot">&lt;-</span> {{select_query_name}}</span>
-<span id="cb12-6"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co">#```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co">#```{r, echo = {{select_query_knit}}, include = {{select_query_knit</span><span class="re">}}}</span></span>
+<span id="cb13-2"><a href="" aria-hidden="true" tabindex="-1"></a>poly <span class="ot">&lt;-</span> <span class="fu">matrix</span>({{select_query_poly}}, <span class="at">ncol =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb13-3"><a href="" aria-hidden="true" tabindex="-1"></a>token <span class="ot">&lt;-</span> {{select_query_token}}</span>
+<span id="cb13-4"><a href="" aria-hidden="true" tabindex="-1"></a>ras <span class="ot">&lt;-</span> <span class="fu">select_query</span>(poly, {{select_query_date}}, token)</span>
+<span id="cb13-5"><a href="" aria-hidden="true" tabindex="-1"></a>raster_name <span class="ot">&lt;-</span> {{select_query_name}}</span>
+<span id="cb13-6"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co">#```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="to-create-a-reproducible-chunk" class="slide level2 mediumcode">
 <h2>To create a reproducible chunk</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co">#```{r}</span></span>
-<span id="cb13-2"><a href="" aria-hidden="true" tabindex="-1"></a>poly <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="fl">1.54202</span>, <span class="sc">-</span><span class="fl">1.54202</span>, <span class="sc">-</span><span class="fl">0.718279</span>, <span class="sc">-</span><span class="fl">0.718279</span>, <span class="sc">-</span><span class="fl">1.54202</span>, <span class="fl">52.509368</span>, <span class="fl">52.789309</span>, <span class="fl">52.789309</span>, <span class="fl">52.509368</span>, <span class="fl">52.509368</span>), <span class="at">ncol =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb13-3"><a href="" aria-hidden="true" tabindex="-1"></a>token <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
-<span id="cb13-4"><a href="" aria-hidden="true" tabindex="-1"></a>ras <span class="ot">&lt;-</span> <span class="fu">select_query</span>(poly, <span class="st">"2024-10-09"</span>, token)</span>
-<span id="cb13-5"><a href="" aria-hidden="true" tabindex="-1"></a>raster_name <span class="ot">&lt;-</span> <span class="st">"FAPAR"</span></span>
-<span id="cb13-6"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co">#```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co">#```{r}</span></span>
+<span id="cb14-2"><a href="" aria-hidden="true" tabindex="-1"></a>poly <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="fl">1.54202</span>, <span class="sc">-</span><span class="fl">1.54202</span>, <span class="sc">-</span><span class="fl">0.718279</span>, <span class="sc">-</span><span class="fl">0.718279</span>, <span class="sc">-</span><span class="fl">1.54202</span>, <span class="fl">52.509368</span>, <span class="fl">52.789309</span>, <span class="fl">52.789309</span>, <span class="fl">52.509368</span>, <span class="fl">52.509368</span>), <span class="at">ncol =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb14-3"><a href="" aria-hidden="true" tabindex="-1"></a>token <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb14-4"><a href="" aria-hidden="true" tabindex="-1"></a>ras <span class="ot">&lt;-</span> <span class="fu">select_query</span>(poly, <span class="st">"2024-10-09"</span>, token)</span>
+<span id="cb14-5"><a href="" aria-hidden="true" tabindex="-1"></a>raster_name <span class="ot">&lt;-</span> <span class="st">"FAPAR"</span></span>
+<span id="cb14-6"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co">#```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="you-can-also-just-add-data-directly-to-the-markdown" class="slide level2">
+<section id="you-can-also-just-add-data-directly-to-the-markdown" class="slide level2 mediumtext">
 <h2>You can also just add data directly to the markdown</h2>
 <ul>
 <li>If the output of a module is a small dataframe (~ 1000 values) then you can insert that straight into the markdown</li>
@@ -1241,14 +1241,14 @@ Simon Smart
 <li>Unlike for <code>save_and_load()</code> this requires manual work afterwards and can therefore only be called once for each module</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">metadata</span>(<span class="st">"."</span>) <span class="co"># for all modules</span></span>
-<span id="cb14-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">metadata</span>(<span class="st">"."</span>, <span class="at">module =</span> <span class="st">"component_module"</span>) <span class="co"># for a single module</span></span>
-<span id="cb14-3"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-4"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">numericInput</span>(<span class="fu">ns</span>(<span class="st">"number"</span>), <span class="st">"Enter a number"</span>, <span class="at">value =</span> <span class="dv">5</span>)</span>
-<span id="cb14-5"><a href="" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-6"><a href="" aria-hidden="true" tabindex="-1"></a>common<span class="sc">$</span>meta<span class="sc">$</span>component_module<span class="sc">$</span>number <span class="ot">&lt;-</span> input<span class="sc">$</span>number <span class="co"># store</span></span>
-<span id="cb14-7"><a href="" aria-hidden="true" tabindex="-1"></a>component_module_number <span class="ot">&lt;-</span> common<span class="sc">$</span>meta<span class="sc">$</span>component_module<span class="sc">$</span>number <span class="co"># transfer to Rmd</span></span>
-<span id="cb14-8"><a href="" aria-hidden="true" tabindex="-1"></a>{{component_module_number}} <span class="co"># use in Rmd</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">metadata</span>(<span class="st">"."</span>) <span class="co"># for all modules</span></span>
+<span id="cb15-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">metadata</span>(<span class="st">"."</span>, <span class="at">module =</span> <span class="st">"component_module"</span>) <span class="co"># for a single module</span></span>
+<span id="cb15-3"><a href="" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">numericInput</span>(<span class="fu">ns</span>(<span class="st">"number"</span>), <span class="st">"Enter a number"</span>, <span class="at">value =</span> <span class="dv">5</span>)</span>
+<span id="cb15-5"><a href="" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="" aria-hidden="true" tabindex="-1"></a>common<span class="sc">$</span>meta<span class="sc">$</span>component_module<span class="sc">$</span>number <span class="ot">&lt;-</span> input<span class="sc">$</span>number <span class="co"># store</span></span>
+<span id="cb15-7"><a href="" aria-hidden="true" tabindex="-1"></a>component_module_number <span class="ot">&lt;-</span> common<span class="sc">$</span>meta<span class="sc">$</span>component_module<span class="sc">$</span>number <span class="co"># transfer to Rmd</span></span>
+<span id="cb15-8"><a href="" aria-hidden="true" tabindex="-1"></a>{{component_module_number}} <span class="co"># use in Rmd</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="testing" class="slide level2 mediumcode">
@@ -1259,23 +1259,23 @@ Simon Smart
 <li>End-to-end tests check that the whole module works</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">test_that</span>(<span class="st">"Check select_user function works as expected"</span>, {</span>
-<span id="cb15-2"><a href="" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">select_user</span>()</span>
-<span id="cb15-3"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">expect_true</span>(<span class="fu">is.null</span>(result))</span>
-<span id="cb15-4"><a href="" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">test_that</span>(<span class="st">"Check select_user function works as expected"</span>, {</span>
+<span id="cb16-2"><a href="" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">select_user</span>()</span>
+<span id="cb16-3"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">expect_true</span>(<span class="fu">is.null</span>(result))</span>
+<span id="cb16-4"><a href="" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="end-to-end-tests" class="slide level2 mediumcode">
 <h2>End-to-end tests</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">test_that</span>(<span class="st">"{shinytest2} recording: e2e_select_user"</span>, {</span>
-<span id="cb16-2"><a href="" aria-hidden="true" tabindex="-1"></a>  app <span class="ot">&lt;-</span> shinytest2<span class="sc">::</span>AppDriver<span class="sc">$</span><span class="fu">new</span>(<span class="at">app_dir =</span> <span class="fu">system.file</span>(<span class="st">"shiny"</span>, <span class="at">package =</span> <span class="st">"demo"</span>), <span class="at">name =</span> <span class="st">"e2e_select_user"</span>)</span>
-<span id="cb16-3"><a href="" aria-hidden="true" tabindex="-1"></a>  app<span class="sc">$</span><span class="fu">set_inputs</span>(<span class="at">tabs =</span> <span class="st">"select"</span>)</span>
-<span id="cb16-4"><a href="" aria-hidden="true" tabindex="-1"></a>  app<span class="sc">$</span><span class="fu">set_inputs</span>(<span class="at">selectSel =</span> <span class="st">"select_user"</span>)</span>
-<span id="cb16-5"><a href="" aria-hidden="true" tabindex="-1"></a>  app<span class="sc">$</span><span class="fu">click</span>(<span class="st">"select_user-run"</span>)</span>
-<span id="cb16-6"><a href="" aria-hidden="true" tabindex="-1"></a>  common <span class="ot">&lt;-</span> app<span class="sc">$</span><span class="fu">get_value</span>(<span class="at">export =</span> <span class="st">"common"</span>)</span>
-<span id="cb16-7"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">expect_true</span>(<span class="fu">is.null</span>(common<span class="sc">$</span>scatter))</span>
-<span id="cb16-8"><a href="" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">test_that</span>(<span class="st">"{shinytest2} recording: e2e_select_user"</span>, {</span>
+<span id="cb17-2"><a href="" aria-hidden="true" tabindex="-1"></a>  app <span class="ot">&lt;-</span> shinytest2<span class="sc">::</span>AppDriver<span class="sc">$</span><span class="fu">new</span>(<span class="at">app_dir =</span> <span class="fu">system.file</span>(<span class="st">"shiny"</span>, <span class="at">package =</span> <span class="st">"demo"</span>), <span class="at">name =</span> <span class="st">"e2e_select_user"</span>)</span>
+<span id="cb17-3"><a href="" aria-hidden="true" tabindex="-1"></a>  app<span class="sc">$</span><span class="fu">set_inputs</span>(<span class="at">tabs =</span> <span class="st">"select"</span>)</span>
+<span id="cb17-4"><a href="" aria-hidden="true" tabindex="-1"></a>  app<span class="sc">$</span><span class="fu">set_inputs</span>(<span class="at">selectSel =</span> <span class="st">"select_user"</span>)</span>
+<span id="cb17-5"><a href="" aria-hidden="true" tabindex="-1"></a>  app<span class="sc">$</span><span class="fu">click</span>(<span class="st">"select_user-run"</span>)</span>
+<span id="cb17-6"><a href="" aria-hidden="true" tabindex="-1"></a>  common <span class="ot">&lt;-</span> app<span class="sc">$</span><span class="fu">get_value</span>(<span class="at">export =</span> <span class="st">"common"</span>)</span>
+<span id="cb17-7"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="fu">expect_true</span>(<span class="fu">is.null</span>(common<span class="sc">$</span>scatter))</span>
+<span id="cb17-8"><a href="" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="info-and-support" class="slide level2">

@@ -1,4 +1,6 @@
 
+Create an empty app
+
 ```{r}
 # define the modules
 modules <- data.frame(
@@ -26,6 +28,7 @@ SSdemo::run_SSdemo()
 
 ```
 
+Add some modules from the example app
 
 ```{r}
 # copy modules from shinyscholar example app
@@ -38,15 +41,22 @@ for (f in c(select, plot_hist, plot_scat)){
 }
 
 # copy functions 
-functions <- c("select_async", "select_query", "select_user", "plot_hist", "plot_scatter")
+functions <- c("select_async", "select_query", "plot_hist", "plot_scatter")
 
 for (f in functions){
   url <- glue::glue("https://raw.githubusercontent.com/simon-smart88/shinyscholar/refs/heads/master/R/{f}_f.R")
   download.file(url, file.path("~", "Documents", "SSdemo", f, "_f.R"))
 }
 
+# redocument and install (note we'd normally both of these via Ctrl+Shift+B inside a project in Rstudio)
+devtools::document(file.path("~", "Documents", "SSdemo"))
+devtools::install(file.path("~", "Documents", "SSdemo"))
+
+SSdemo::run_SSdemo()
+
 ```
 
+Prototype the new function
 
 ```{r}
 
@@ -63,8 +73,124 @@ lower <- 30
 
 modified_raster <- terra::clamp(raster, lower = lower, upper = upper)
 
-modified_raster
+```
 
-terra::plot(modified_raster)
+Create the new function
+
+```{r}
+
+#' @title transform_filter
+#' @description Does x
+#' @param x x
+#' @param logger Stores all notification messages to be displayed in the Log
+#'   Window. Insert the logger reactive list here for running in
+#'   shiny, otherwise leave the default NULL
+#' @return NULL
+#' @examples {
+#' y <- transform_filter(1)  
+#' }
+#' @export
+transform_filter <- function(x, logger = NULL){
+  NULL
+}
+
 
 ```
+
+Write unit tests
+
+```{r}
+test_that("Check transform_filter function works as expected", {
+  result <- transform_filter()
+  expect_true(is.null(result))
+})
+
+```
+
+Create the module
+
+```{r}
+transform_filter_module_ui <- function(id) {
+  ns <- shiny::NS(id)
+  tagList(
+    # UI
+
+    actionButton(ns("run"), "Run module transform_filter", icon = icon("arrow-turn-down")),
+    downloadButton(ns("download"), "Download")
+
+
+  )
+}
+
+transform_filter_module_server <- function(id, common, parent_session, map) {
+  moduleServer(id, function(input, output, session) {
+
+  shinyjs::hide("download")
+
+  observeEvent(input$run, {
+    # WARNING ####
+
+    # FUNCTION CALL ####
+
+    # LOAD INTO COMMON ####
+
+    # METADATA ####
+    # Populate using metadata()
+
+    # TRIGGER
+    trigger("transform_filter")
+
+    shinyjs::show("download")
+
+  })
+
+  output$result <- renderText({
+    watch("transform_filter")
+    # Result
+  })
+
+  output$download <- downloadHandler(
+    filename = function() {
+      "placeholder.ext"
+    },
+    content = function(file) {
+      # Download content
+    })
+
+  return(list(
+    save = function() {
+      # Save any values that should be saved when the current session is saved
+      # Populate using save_and_load()
+    },
+    load = function(state) {
+      # Load
+      # Populate using save_and_load()
+    }
+  ))
+
+})
+}
+
+
+transform_filter_module_result <- function(id) {
+  ns <- NS(id)
+
+  # Result UI
+  verbatimTextOutput(ns("result"))
+}
+
+transform_filter_module_map <- function(map, common) {
+  # Map logic
+}
+
+transform_filter_module_rmd <- function(common) {
+  # Variables used in the module's Rmd code
+  # Populate using metadata()
+}
+
+
+
+
+```
+
+

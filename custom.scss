@@ -32,6 +32,10 @@ h2 {
   font-size: 2.2em;
 }
 
+.smallheader h2 {
+  font-size: 2em;
+}
+
 ul {
   font-size:1.6em;
 }
@@ -60,11 +64,20 @@ font-size: 1.2em;
 
 .smalltext ul,
 .smalltext li{
+font-size: 1.1em;
+}
+
+.verysmalltext ul,
+.verysmalltext li{
 font-size: 1em;
 }
 
 table {
 font-size: 30px;
+}
+
+.reveal pre code {
+  max-height: 700px;
 }
 
 .centre_image {

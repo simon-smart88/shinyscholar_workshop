@@ -1,0 +1,94 @@
+/*-- scss:defaults --*/
+
+$body-bg: #e4fbf8;
+$body-color: #138541;
+$code-color: #264688;
+
+/*-- scss:rules --*/
+
+.reveal .slide blockquote {
+  border-left: 3px solid $text-muted;
+  padding-left: 0.5em;
+}
+
+.icons ul {
+   list-style: none;
+   margin-left: 0;
+   padding-left: 1em;
+   text-indent: -0.6em;
+}
+  
+  
+h2 {
+  color: #264688 !important;
+}
+
+
+.reveal pre.sourceCode code{
+  background-color: #F0F0F0;
+}
+
+.reveal h2 {
+  font-size: 2.2em;
+}
+
+ul {
+  font-size:1.6em;
+}
+
+/* Stops nested increase in font size */
+ul ul {
+  font-size: 1em;
+}
+
+code.sourceCode {
+  font-size: 0.8em;
+}
+
+.largecode code.sourceCode {
+font-size: 2.2em;
+}
+
+.mediumcode code.sourceCode {
+font-size: 1.6em;
+}
+
+.mediumtext ul,
+.mediumtext li {
+font-size: 1.2em;
+}
+
+.smalltext ul,
+.smalltext li{
+font-size: 1em;
+}
+
+table {
+font-size: 30px;
+}
+
+.centre_image {
+  display: block !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+.reveal .footer {
+  display: flex;
+  position: absolute;
+  bottom: 100;
+  width: 100%;
+  margin-left: 200px;
+  text-align: center;
+  font-size: 0.7em;
+  color: #264688;
+  z-index: 2;
+  margin-right: 250px;
+}
+
+/*logo*/
+.reveal .slide-logo {
+  height: 8% !important;
+  max-width: unset !important;
+  max-height: unset !important;
+}

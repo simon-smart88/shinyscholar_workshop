@@ -1,0 +1,742 @@
+---
+title: "Shinyscholar"
+subtitle: "A template for creating reproducible Shiny applications"
+author: "Simon Smart"
+format: 
+  revealjs:
+    logo: images/uol_logo.png
+    code-line-numbers: false
+    theme: [default, custom.scss]
+    chalkboard: true
+    width: 1600  
+    height: 900
+    scale: true
+    slide-number: true
+date: "7 June 2025"
+preload-iframes: false
+---
+
+## Overview
+
+-   What is Shiny?
+-   Use of Shiny in academia
+-   How Shinyscholar helps to avoid common problems
+-   How to use `create_template()`
+-   How to develop modules
+
+## About me
+
+-   Background in plant sciences and agricultural science
+-   Software developer in the Biostats group with Tim Lucas
+-   Latecomer to R, starting in 2018
+-   Quickly fell in love with Shiny
+
+## Tomvision
+<img src="images/tomvision.png" class="centre_image" >
+
+## Potato Yield Model Dashboard
+
+![](images/PYM_home.png)
+
+## Disagapp
+
+<img src="images/disagapp.png" class="centre_image" >
+
+::: footer
+[https://disagapp.le.ac.uk/](https://disagapp.le.ac.uk/)
+:::
+
+## Shiny apps are becoming increasingly popular in academia
+
+::: columns
+::: {.column width="55%"}
+-   The low barrier to entry makes Shiny popular
+-   Substantially increased apps as a method of dissemination
+-   "shiny app" or "shiny application" in Web of Science:
+:::
+
+::: {.column width="45%"}
+```{r echo = FALSE, fig.height=10}
+year <- c(2012, 2015:2023) 
+apps <- c(1, 4, 3, 12, 17, 39, 69, 75, 100, 134)
+mod <- lm(log(apps) ~ year)
+
+par(cex = 1.5, bg = '#e4fbf8')
+plot(year, apps, pch = 16, xlab = '', ylab = 'Number of publications')
+lines(seq(2012, 2023, 0.1), exp(predict(mod, data.frame(year = seq(2012, 2023, 0.1)))), col = 'blue')
+
+```
+:::
+:::
+
+::: {.notes}
+-   Easier to develop than using other web frameworks
+- Existing code can be adapted
+:::
+
+## The ease of development provides advantages and disadvantages
+
+-   Simple apps can be created in an afternoon
+-   Academics rarely have training in software development
+-   What started simple can quickly snowball to become very complex
+
+## Data flows through an analysis in discrete steps 
+
+<img src="images/data_pipeline.svg" class="centre_image" >
+ 
+::: footer
+- Adapted from <a href="https://r4ds.hadley.nz/intro" target="_blank">Wickham (2022)</a>
+:::
+ 
+::: {.notes}
+-   Analytical apps have a flow of data through them
+-   Similar to an analysis, but we are providing options for the user to take their own particular path
+-   Distinguish between datavis apps and analysis apps
+:::
+
+## App design
+
+-  What features do we need?
+    - Generic
+    - Specific
+-  How should the code be structured?
+-  How do we make sure that it works?
+
+## What characteristics should academic apps have?
+
+::: columns
+::: {.column width="50%"}
+::: {.fragment .fade-in}
+-   Open
+:::
+::: {.fragment .fade-in}
+-   Attributable
+:::
+::: {.fragment .fade-in}
+-   Instructive
+:::
+:::
+
+::: {.column width="50%"}
+
+::: {.fragment .fade-in}
+-   Reproducible
+:::
+::: {.fragment .fade-in}
+-   Reliable
+:::
+::: {.fragment .fade-in}
+-   Maintainable
+:::
+:::
+:::
+
+::: {.notes}
+- We are all familiar with the format and conventions of papers, but they weren't always like that. Should we aim to develop similar conventions for apps?
+
+- Open enables reuse and collaboration
+- Important to recognise developers of the software like authors of a paper
+- Users should be guided through inside of the application, not through watching videos or reading a guide 
+- Analyses performed in the app should be reproducible outside of it
+- We should be confident that it functions as intended through the use of automated testing
+- Contracts are short, so it is important people unfamiliar with the code can understand what is happening.
+
+:::
+
+
+## How should app code be structured?
+
+::: columns
+::: {.column width="20%"}
+:::
+::: {.column width="15%"}
+::: fragment
+![](images/app_arch_1.svg)
+:::
+:::
+:::
+
+## How should app code be structured?
+![](images/ROGUE_input.png)
+![](images/ROGUE_output.png)
+
+## How should app code be structured?
+::: columns
+::: {.column width="20%"}
+:::
+::: {.column width="15%"}
+![](images/app_arch_1.svg)
+:::
+
+::: {.column width="15%"}
+::: fragment
+![](images/app_arch_2.svg)
+:::
+:::
+
+::: {.column width="15%"}
+::: fragment
+![](images/app_arch_3.svg)
+:::
+:::
+
+::: {.column width="15%"}
+::: fragment
+![](images/app_arch_4.svg)
+:::
+:::
+:::
+
+## 50 apps published in 2023 were surveyed to determine current practices
+
+<img src="images/app_features.svg" class="centre_image" >
+
+::: {.notes}
+- Caveat: not all were analytical applications
+- i.e. whilst best practice, they are not used due to the difficulty of implementation
+:::
+
+## The size and structure of codebases varied substantially
+<img src="images/code_features.svg" class="centre_image" >
+
+## Other frameworks exist for making production quality shiny apps
+
+- `{rhino}` by Appsilon: dashboard-focused
+- `{golem}` by ThinkR: good but generic
+- `{teal}` by Insight Engineering / Roche: pharma-focused
+
+## `{shinymeta}` can also be used to create reproducible apps
+
+- Developed by Posit
+- Requires a lot of refactoring / unusual syntax
+- Unclear if it's suited to large apps
+
+## Wallace is an app for modelling species distributions
+<img src="images/wallace.png" class="centre_image" >
+
+## Wallace is an app for modelling species distributions
+
+-   In development since 2015 with two major releases
+-   Feature-rich with many ideal characteristics:
+
+::: columns
+::: {.column width="50%"}
+-   Error messages
+-   Logging
+-   Save and load
+:::
+::: {.column width="50%"}
+-   Reproducible
+-   Cites packages used
+:::
+:::
+
+::: footer
+- Kass *et al.* (2018) <a href="https://doi.org/10.1111/2041-210X.12945" target="_blank">DOI: 10.1111/2041-210X.12945</a>
+- Kass *et al.* (2022) <a href="https://doi.org/10.1111/ecog.06547" target="_blank">DOI: 10.1111/ecog.06547</a>
+:::
+
+## Wallace provided the foundation to create shinyscholar
+
+-  Lots of useful features that are difficult to implement from scratch
+-  Removed all the modules
+-  Adapted files so they could be edited programmatically
+
+## New features
+
+- Updated UI
+- Viewing source code
+- Running async tasks
+- End-to-end testing with {shinytest2}
+- Simplified reproducibility
+- Long-term reproducibility via {renv}
+- Automated tedious coding
+
+## Installation
+
+- `install.packages("shinyscholar")` installs all you need to create new apps
+- The package also includes an example app, which requires `install.packages("shinyscholar", dependencies = TRUE)` to run
+
+## Shinyscholar enforces a strict structure
+
+-   Analyses are split into components and modules
+-   Each module calls a function
+-   Each module is reproduced by a markdown chunk
+-   Data is passed between modules through `common`
+
+## 
+
+- Modules are self-contained
+- New modules slot in easily
+- Explicit for developers where code is located
+
+## `create_template()` requires a dataframe of modules 
+
+```{r eval = TRUE, echo = FALSE}
+
+modules <- data.frame(
+"component" = c("select", "select", "plot", "plot"),
+"long_component" = c("Select data", "Select data", "Plot data", "Plot data"),
+"module" = c("async", "query", "hist", "scatter"),
+"long_module" = c("Upload your own data", "Query a database to obtain data",
+                  "Plot the data as a histogram", "Plot the data as a scatterplot"),
+"map" = c(TRUE, TRUE, FALSE, FALSE),
+"result" = c(FALSE, FALSE, TRUE, TRUE),
+"rmd" = c(TRUE, TRUE, TRUE, TRUE),
+"save" = c(TRUE, TRUE, TRUE, TRUE),
+"download" = c(FALSE, FALSE, TRUE, TRUE),
+"async" = c(TRUE, TRUE, FALSE, FALSE))
+
+```
+
+```{r val = TRUE, echo = FALSE}
+knitr::kable(modules, format = "html")
+```
+
+## Modules in disagapp
+<img src="images/disagg_modules_path.svg" class="centre_image" >
+
+## `common` is an object passed between modules 
+
+- A shared environment for data
+- Avoids having to manually manage what data each module interacts with
+- Helps ensure consistent use of variable names
+- All set to `NULL` by default 
+- `common$reset()` allows it to be reset
+
+## `common` in Disagapp {.mediumtext}
+
+::: columns
+::: {.column width="33%"}
+- `shape`
+- `response_name`
+- `agg`
+- `agg_prep`
+- `agg_prep_lores`
+- `covs`
+:::
+::: {.column width="33%"}
+- `covs_prep`
+- `covs_prep_lores`
+- `covs_matrix`
+- `covs_summary`
+- `mesh`
+- `prep`
+:::
+::: {.column width="33%"}
+- `fit`
+- `fit_plot`
+- `pred`
+- `transfer`
+- `map_layers`
+- `poly`
+:::
+:::
+
+
+## `create_template()` creates an empty app {.mediumcode}
+```{r eval = FALSE, echo = TRUE}
+
+common_objects = c("raster", "histogram", "scatter")
+
+shinyscholar::create_template(
+  path = file.path("~", "Documents"), name = "demo", author = "Simon Smart",
+  include_map = TRUE, include_table = TRUE, include_code = TRUE, 
+  common_objects = common_objects, modules = modules, install = TRUE)
+
+demo::run_demo()
+```
+
+
+## Structure of the app files
+
+```
+├── DESCRIPTION                                                 Define dependencies
+├── inst
+│   └── shiny
+│       ├── common.R                                            Data objects shared between modules
+│       ├── global.R                                            Loads package and modules
+│       ├── helpers.R                                           Functions to create module UI
+│       ├── server.R                                            App server
+│       ├── ui.R                                                App UI
+│       ├── modules
+│       │   ├── core_code.R                                     Displays code
+│       │   ├── core_intro.R                                    Produces introductory walkthrough
+│       │   ├── core_load.R                                     Loads app
+│       │   ├── core_mapping.R                                  Creates map
+│       │   ├── core_save.R                                     Saves app
+│       │   ├── load_database.md                                Module guidance
+│       │   ├── load_database.R                                 Module UI and server
+│       │   ├── load_database.Rmd                               Reproduces the module
+│       │   ├── load_database.yml                               Module configuration
+│       │   ├── ... (repeated for other modules)
+│       ├── Rmd
+│       │   ├── gtext_load.Rmd                                  Guidance text for each component
+│       │   ├── gtext_plot.Rmd
+│       │   ├── gtext_rep.Rmd
+│       │   ├── references.Rmd                                  Template for rep_refPackages
+│       │   ├── text_about.Rmd                                  Main panel on intro tab
+│       │   ├── text_how_to_use.Rmd                             Detailed instructions
+│       │   ├── text_intro_tab.Rmd                              Sidebar on intro tab
+│       │   ├── text_loadsesh.Rmd                               Guidance for loading
+│       │   ├── text_team.Rmd                                   Lists developers
+│       │   ├── userReport_intro.Rmd                            Introduction to markdown
+│       │   └── userReport_module.Rmd
+│       └── www
+│           ├── css
+│           │   └── styles.css
+│           ├── favicon.ico
+│           ├── js
+│           │   └── shinyjs-funcs.js
+│           └── logo.png
+├── R
+│   ├── helper_functions.R                                      Various utility functions
+│   ├── run_demo.R                                              Function to run app
+│   ├── load_database_f.R                                       Function for each module
+│   ├── load_user_f.R
+│   ├── plot_histogram_f.R
+│   └── plot_scatter_f.R
+└── tests
+    └── testthat
+        ├── test-load_user.R                                    Tests for each module
+        ├── test-load_database.R
+        ├── test-plot_histogram.R
+        └── test-plot_scatter.R
+
+```
+
+## Shiny modules {.mediumcode .mediumtext}
+
+- Splitting code into self-contained chunks makes it easier to manage
+- `input` and `output` IDs are *namespaced*: 
+
+```{r eval = FALSE, echo = TRUE}
+numericInput("number") 
+plotOutput("plot") 
+
+ns <- NS(id)
+plotOutput(ns("plot"))
+numericInput(ns("number"))
+```
+
+- When used inside a module called `load`, `ns()` appends `load-` to the ID so `load-plot` and `load-number` are created
+
+## Shiny modules
+- However, we have to manage:
+  - Sourcing the functions
+  - Calling the functions
+  - Passing data between modules
+  - Reactivity between modules
+
+## Each module has several files associated with it {.smalltext}
+
+- In `R/`:
+    -   Function: `<component>_<module>_f.R`
+
+- In `inst/modules/`:
+    -   Module: `<component>_<module>.R`
+    -   Rmarkdown: `<component>_<module>.Rmd`
+    -   Guidance: `<component>_<module>.md`
+    -   Configuration: `<component>_<module>.yml`
+
+- In `tests/:`
+    -   Tests: `test-<component>_<module>.R`
+
+## The logging system provides a flexible way to inform users {.mediumcode}
+
+- Messages can be sent to users via `common$logger |> writeLog()`
+- Either from inside the module function or the module server function
+
+```{r eval = FALSE, echo = TRUE}
+if (is.null(common$raster)) {
+  common$logger |> writeLog(type = "error", "Please load a raster file")
+  return()
+}
+```
+
+## The logging system provides a flexible way to inform users {.mediumtext}
+
+- When `type = "info" / "warning" / "error"` a `shinyalert::shinyalert()` modal is also displayed
+- `type = "starting" / "complete"` keep track of slow tasks
+- When `logger = NULL` inside a function, i.e. when used in the rmarkdown messages are passed to `message()`, `warning()` or `stop()` instead 
+
+## Unusually, data is not reactive
+
+- Shiny is built to be reactive, but for large apps it can be difficult to control
+- Data in shinyscholar is not reactive 
+- `{gargoyle}` is used instead to explicitly trigger reactivity
+
+## Gargoyle is used to trigger events
+
+- Each module's identifier can be used to trigger events
+- `init(<id>)` is called during app start up
+- `trigger(<id>)` is called when a module runs successfully
+- `watch(<id>)` is used inside any outputs to be generated
+
+## Module development workflow
+
+<img src="images/disagg_modules_path.svg" class="centre_image" >
+
+## Developing the module function
+
+- Functions split the business logic from the shiny logic and enable reproducibility
+- First of all develop the function in an rmarkdown file
+- Once it works, move it to the function file and document
+- Parameters should either be `common` objects or `input` values
+
+## Modules contain several functions {.mediumtext}
+
+- `<identifier>_module_ui()` - user inputs
+- `<identifier>_module_server()` - server function
+
+- Optional:
+  - `<identifier>_module_result()` - display outputs
+  - `<identifier>_module_map()` - modify the map
+  - `<identifier>_module_rmd()` - transfer data to rmarkdown
+
+## Module UI {.mediumcode}
+
+- Just as you would develop a normal shiny UI apart from:
+- Input IDs need wrapping in `ns()`
+- Only inputs are included 
+
+```{r echo = TRUE, eval = FALSE}
+plot_hist_module_ui <- function(id) {
+  ns <- NS(id)
+  tagList(
+    selectInput(ns("bins"), "Number of bins", choices = c(10, 20, 50, 100)),
+    selectInput(ns("pal"), "Colour palette", choices = c("Greens", "YlOrRd", "Greys", "Blues")),
+    actionButton(ns("run"), "Plot histogram")
+  )
+}
+```
+
+## Input widgets are inserted to the sidebar 
+
+<img src="images/input_sidebar.png" >
+
+
+## The server contains an `observeEvent()` triggered by `input$run` {.mediumtext}
+
+- Inputs are checked and any errors logged
+- Inputs are passed to the module function 
+- Input values are stored in `common$meta`
+- Module function is called and results stored in `common`
+- Use `trigger()` to run anything that relies on the results
+- Use `show_map()` or `show_results()` to change the view
+
+## The server contains an `observeEvent()` triggered by `input$run` {.mediumcode}
+
+```{r echo = TRUE, eval = FALSE}
+  observeEvent(input$run, {
+    # WARNING ####
+    if (is.null(common$raster)) {
+      common$logger %>% writeLog(type = "error", "Please load a raster file")
+      return()
+    }
+    # FUNCTION CALL ####
+    histogram <- plot_hist(common$raster, as.numeric(input$bins))
+    # LOAD INTO COMMON ####
+    common$histogram <- histogram
+    # METADATA ####
+    common$meta$plot_hist$bins <- as.numeric(input$bins)
+    common$meta$plot_hist$pal <- input$pal
+    # TRIGGER ####
+    trigger("plot_hist")
+    show_results(parent_session)
+    shinyjs::show("download")
+  })
+```
+
+## Outputs are triggered when the module runs successfully {.mediumcode}
+
+```{r echo = TRUE, eval = FALSE}
+output$hist <- renderPlot({
+  watch("plot_hist")
+  req(common$histogram)
+  plot(common$histogram, freq = FALSE, main = "", xlab = common$meta$plot_hist$name, ylab = "Frequency (%)")
+  })
+```
+
+## Outputs are inserted into the results tab {.mediumcode}
+
+```{r echo = TRUE, eval = FALSE}
+plot_hist_module_result <- function(id) {
+  ns <- NS(id)
+  plotOutput(ns("hist"))
+}
+```
+
+## Asynchronous modules
+
+- A major limitation of R and therefore Shiny is that it is single-threaded by default
+- When a slow operation is occurring apps become unresponsive to the user and anyone else connected to the same instance
+- `ExtendedTask` was added in Shiny v1.8.1 and enables tasks to run in the background
+
+## Slow running tasks can block the UI
+
+<div style="text-align: center;">
+  <video style="width: 80%;" loop muted data-autoplay>
+    <source src="images/async.webm" type="video/webm">
+  </video>
+</div>
+
+## Asynchronous modules
+
+- When `async = TRUE` for a module a different skeleton is used
+- The structure is different since starting the task and dealing with the results are separate
+- The number of currently running tasks is shown under the logger
+
+## The normal logger can't be accessed from inside async tasks {.mediumcode}
+ 
+- `asyncLog()` is similar to `writeLog()` but can be used inside async functions
+- Use `async = FALSE` as the last parameter instead of `logger = NULL` 
+- `return(async %>% asyncLog("message))` sends errors back
+
+```{r  eval = FALSE, echo = TRUE}
+  if (!is.character(date) || is.na(as.Date(date, format = "%Y-%m-%d"))) {
+    return(async %>% asyncLog(type = "error", "date must be a string with the format YYYY-MM-DD"))
+  }
+```
+
+## Listen for messages in the server and then pass to the logger {.mediumcode}
+```{r  eval = FALSE, echo = TRUE}
+    if (class(result) == "list"){ # whatever the successful class is
+      # do stuff
+    } else {
+      common$logger %>% writeLog(type = "error", result)
+    }
+```
+
+## Saving and loading
+
+- When the app is saved, `common` is saved to and `.Rds` 
+- Each module's input values are stored in `common$state`
+- Distinct from those stored in `common$meta` which are only for modules that have been run
+
+## Saving and loading
+
+- Loading reloads data into `common`
+- Input values are restored from `common$state`
+- Module outputs are retriggered from `names(common$meta)`
+
+## The ability to save is also helpful during development
+
+- If working on a feature that relies on results from a slow step, it can be tedious to rerun each time a change is made
+- We can load `common` in an rmarkdown and use the exact data used in the app
+- Set `load_file_path` to point to a save file and it will be loaded automatically 
+
+## `save_and_load()` takes care of tedious coding
+
+```{r echo = TRUE, eval = FALSE}
+save_and_load(".") # for all modules
+save_and_load(".", module = "component_module") # for a single module
+
+numericInput(ns("number"), "Enter a number", value = 5)
+
+list(number = input$number) # save
+updateNumericInput(session, "number", state$number) # load
+```
+
+## Markdown files can be merged to replicate the analysis
+
+-   When a module is used an object becomes `TRUE`
+-   Input values are stored and *knitted* into the markdown
+-   Each chunk of the markdown calls the same function as the module in the app
+-   The chunks for used modules are combined into one `.Rmd` file
+
+## Input values are copied into the rmarkdown {.mediumcode}
+
+```{r eval = FALSE, echo = TRUE}
+#```{r, echo = {{select_query_knit}}, include = {{select_query_knit}}}
+poly <- matrix({{select_query_poly}}, ncol = 2, byrow = FALSE)
+token <- {{select_query_token}}
+ras <- select_query(poly, {{select_query_date}}, token)
+raster_name <- {{select_query_name}}
+#```
+```
+
+## To create a reproducible chunk {.mediumcode}
+
+```{r eval = FALSE, echo = TRUE}
+#```{r}
+poly <- matrix(c(-1.54202, -1.54202, -0.718279, -0.718279, -1.54202, 52.509368, 52.789309, 52.789309, 52.509368, 52.509368), ncol = 2, byrow = FALSE)
+token <- NULL
+ras <- select_query(poly, "2024-10-09", token)
+raster_name <- "FAPAR"
+#```
+```
+
+## You can also just add data directly to the markdown
+
+- If the output of a module is a small dataframe (~ 1000 values) then you can insert that straight into the markdown
+- Especially useful if files are uploaded as that can't be reproduced entirely automatically
+- Alternatively, download a `.zip` of data and load that in the markdown:
+  - https://github.com/simon-smart88/disagapp/blob/main/inst/shiny/modules/rep_covs.R
+  - https://github.com/simon-smart88/disagapp/blob/main/inst/shiny/modules/rep_covs.Rmd
+  - https://github.com/simon-smart88/disagapp/blob/d7739ff034b2bf12760b54516a6d1f087e42b97c/inst/shiny/modules/rep_markdown.R#L77 
+
+## As for saving and loading, `metadata()` takes care of some of the tedium: {.mediumcode}
+
+- Unlike for `save_and_load()` this requires manual work afterwards and can therefore only be called once for each module
+
+```{r echo = TRUE, eval = FALSE}
+metadata(".") # for all modules
+metadata(".", module = "component_module") # for a single module
+
+numericInput(ns("number"), "Enter a number", value = 5)
+
+common$meta$component_module$number <- input$number # store
+component_module_number <- common$meta$component_module$number # transfer to Rmd
+{{component_module_number}} # use in Rmd
+```
+
+## Testing {.mediumcode}
+
+- Each module should have unit tests and end-to-end tests
+- Unit test tests that the module function behaves as you expect
+- End-to-end tests check that the whole module works
+
+```{r echo = TRUE, eval = FALSE}
+test_that("Check select_user function works as expected", {
+  result <- select_user()
+  expect_true(is.null(result))
+})
+```
+
+## End-to-end tests {.mediumcode}
+
+```{r echo = TRUE, eval = FALSE}
+test_that("{shinytest2} recording: e2e_select_user", {
+  app <- shinytest2::AppDriver$new(app_dir = system.file("shiny", package = "demo"), name = "e2e_select_user")
+  app$set_inputs(tabs = "select")
+  app$set_inputs(selectSel = "select_user")
+  app$click("select_user-run")
+  common <- app$get_value(export = "common")
+  expect_true(is.null(common$scatter))
+})
+```
+
+## Info and support
+
+- README at [https://simon-smart88.github.io/shinyscholar/index.html](https://simon-smart88.github.io/shinyscholar/index.html)
+- Bug reports and feature requests: [https://github.com/simon-smart88/shinyscholar/issues](https://github.com/simon-smart88/shinyscholar/issues)
+- Any other questions: [simon.smart@cantab.net](mailto:simon.smart@cantab.net)
+
+## Acknowledgments
+
+::: columns
+::: {.column width="50%"}
+
+- [Tim Lucas](https://timcdlucas.github.io/) for supervision
+- Wellcome for funding
+- Wallace developers 
+:::
+
+::: {.column width="50%"}
+<div> 
+<img src="images/wellcome_logo.png" width="300" style = "display: block;">
+<img src="images/wallace_logo.png" width="300" style = "display: block;">
+</div>
+:::
+:::

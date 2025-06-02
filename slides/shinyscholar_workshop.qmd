@@ -148,11 +148,11 @@ lines(seq(2012, 2023, 0.1), exp(predict(mod, data.frame(year = seq(2012, 2023, 0
 :::
 :::
 
-## There are many ways to structure shiny apps?
+## There are many ways to structure shiny apps
 ![](images/ROGUE_input.png)
 ![](images/ROGUE_output.png)
 
-## There are many ways to structure shiny apps?
+## There are many ways to structure shiny apps
 ::: columns
 ::: {.column width="20%"}
 :::
@@ -675,14 +675,18 @@ raster_name <- "FAPAR"
 #```
 ```
 
-## You can also just add data directly to the markdown {.mediumtext}
+## You can also add data directly to the markdown {.mediumtext}
 
-- If the output of a module is a small dataframe (~ 1000 values) then you can insert that straight into the markdown
-- Especially useful if files are uploaded as that can't be reproduced entirely automatically
-- Alternatively, download a `.zip` of data and load that in the markdown:
+- If the output of a module is a small dataframe (~ 1000 values) then you can insert the `common` object straight into the markdown
+- Especially useful if files are uploaded as that can't be reproduced automatically
+- Alternatively, download a `.zip` of data and load that in the markdown (example below)
+
+:::footer
   - https://github.com/simon-smart88/disagapp/blob/main/inst/shiny/modules/rep_covs.R
   - https://github.com/simon-smart88/disagapp/blob/main/inst/shiny/modules/rep_covs.Rmd
   - https://github.com/simon-smart88/disagapp/blob/d7739ff034b2bf12760b54516a6d1f087e42b97c/inst/shiny/modules/rep_markdown.R#L77 
+
+:::
 
 ## As for saving and loading, `metadata()` takes care of some of the tedium: {.mediumcode}
 

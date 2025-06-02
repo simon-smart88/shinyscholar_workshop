@@ -35,8 +35,9 @@ Add some modules from the example app
 select <- list.files(path = system.file("shiny", "modules", package = "shinyscholar"), pattern = "select_", full.names = TRUE)
 plot_hist <- list.files(path = system.file("shiny", "modules", package = "shinyscholar"), pattern = "plot_hist", full.names = TRUE)
 plot_scat <- list.files(path = system.file("shiny", "modules", package = "shinyscholar"), pattern = "plot_scat", full.names = TRUE)
- 
-for (f in c(select, plot_hist, plot_scat)){
+load <- list.files(path = system.file("shiny", "modules", package = "shinyscholar"), pattern = "core_load", full.names = TRUE)
+
+for (f in c(select, plot_hist, plot_scat, load)){
   file.copy(f, file.path("~", "Documents", "SSdemo", "inst", "shiny", "modules"), overwrite = TRUE)
 }
 
@@ -48,7 +49,7 @@ for (f in functions){
   download.file(url, file.path("~", "Documents", "SSdemo", f, "_f.R"))
 }
 
-# redocument and install (note we'd normally both of these via Ctrl+Shift+B inside a project in Rstudio)
+# redocument and install (note we'd normally both of these via Ctrl+Shift+B inside a project in RStudio)
 devtools::document(file.path("~", "Documents", "SSdemo"))
 devtools::install(file.path("~", "Documents", "SSdemo"))
 
@@ -61,17 +62,15 @@ Prototype the new function
 ```{r}
 
 # load raster from saved common
-#common <- readRDS("demo-session-2025-06-07.rds")
+common <- readRDS("SSdemo-session.rds")
 
-common <- readRDS(file.path("~", "Downloads", "shinyscholar-session-2025-02-06.rds"))
-
-# only need for terra objects 
+# only need because terra objects are pointers to C++ objects - most objects load normally
 raster <- terra::unwrap(common$raster)
 
 upper <- 90
 lower <- 30
 
-modified_raster <- terra::clamp(raster, lower = lower, upper = upper)
+modified_raster <- terra::clamp(raster, lower = lower, upper = upper, values = FALSE)
 
 ```
 
@@ -98,6 +97,13 @@ transform_filter <- function(x, logger = NULL){
 ```
 
 Write unit tests
+
+- raster needs to be a SpatRaster
+- min and max need to be numeric
+
+- Number of pixels shouldn't change
+- Max value = max
+- Min value = min
 
 ```{r}
 test_that("Check transform_filter function works as expected", {
@@ -193,4 +199,37 @@ transform_filter_module_rmd <- function(common) {
 
 ```
 
+Add metadata and save lines
+
+```{r}
+# inside a project save_and_load(".", "transform_filter") would work
+save_and_load(file.path("~", "Documents", "SSdemo"), "transform_filter")
+metadata(file.path("~", "Documents", "SSdemo"), "transform_filter")
+
+```
+
+Add a reproducible chunk
+
+```{r}
+
+
+```
+
+
+End-to-end tests
+
+```{r}
+test_that("{shinytest2} recording: e2e_transform_filter", {
+  app <- shinytest2::AppDriver$new(app_dir = system.file("shiny", package = "SSdemo"), name = "e2e_transform_filter")
+  app$set_inputs(tabs = "transform")
+  app$set_inputs(transformSel = "transform_filter")
+  app$click("transform_filter-run")
+  common <- app$get_value(export = "common")
+  expect_true(is.null(common$scatter))
+})
+
+
+
+
+```
 

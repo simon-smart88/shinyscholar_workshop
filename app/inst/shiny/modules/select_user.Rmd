@@ -1,0 +1,19 @@
+```{asis, echo = {{select_user_knit}}, eval = {{select_user_knit}}, include = {{select_user_knit}}}
+Uploads the user-specified raster image. If the raster is not in the current working directory, please provide the path to the directory.
+```
+
+```{r, echo = {{select_user_knit}}, include = {{select_user_knit}}}
+raster_directory <- ""
+raster <- select_user(file.path(raster_directory, {{select_user_path}}))
+raster_name <- {{select_user_name}}
+
+raster_extent <- as.vector(terra::ext(raster))
+map_pal <- colorBin("YlOrRd", domain = values(raster), bins = 9, na.color = "#00000000")
+
+leaflet() |>
+  addProviderTiles("Esri.WorldTopoMap") |>
+  addRasterImage(raster, colors = map_pal) |>
+  fitBounds(lng1 = raster_extent[[1]], lng2 = raster_extent[[2]], lat1 = raster_extent[[3]], lat2 = raster_extent[[4]]) |>
+  addLegend(position = "bottomright", pal = map_pal, values = values(raster),
+            title = raster_name) 
+```

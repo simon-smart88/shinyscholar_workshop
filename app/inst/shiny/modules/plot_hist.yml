@@ -1,0 +1,5 @@
+component: "plot"
+short_name: "Histogram"
+long_name: "Plot data on a histogram"
+authors: "Simon E. H. Smart"
+package: [graphics,RColorBrewer]

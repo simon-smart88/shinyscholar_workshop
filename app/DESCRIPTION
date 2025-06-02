@@ -1,0 +1,33 @@
+Package: SSdemo
+Version: 0.0.1
+Title: Add a title
+Description: Describe your application in complete sentences.
+Authors@R: 
+    c(person("Simon E. H.", "Smart", email = "simon.smart@cantab.net", role = c("aut","cre")))
+Depends:
+    R (>= 4.1.0),
+    bslib,
+    gargoyle,
+    leaflet (>= 2.0.2),
+    shiny (>= 1.8.1)
+Imports:
+    DT (>= 0.5),
+    glue,
+    knitcitations,
+    markdown,
+    R6,
+    renv,
+    mirai,
+    rmarkdown,
+    shinyAce,
+    shinyalert,
+    shinybusy,
+    shinyjs,
+    shinyWidgets (>= 0.6.0),
+    tools
+Suggests: 
+    shinytest2,
+    testthat
+License: GPL-3
+Encoding: UTF-8
+RoxygenNote: 7.3.2

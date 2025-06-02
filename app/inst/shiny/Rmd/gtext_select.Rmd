@@ -1,0 +1,10 @@
+---
+title: select
+output: html_document
+---
+
+### **Component: Select data**
+
+  **ORIENTATION**
+
+  **REFERENCES**

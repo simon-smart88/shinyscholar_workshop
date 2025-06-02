@@ -1,0 +1,8 @@
+```{asis, echo = {{transform_filter_knit}}, eval = {{transform_filter_knit}}, include = {{transform_filter_knit}}}
+Description of what the code will do {{var1}}
+```
+
+```{r, echo = {{transform_filter_knit}}, include = {{transform_filter_knit}}}
+# R code to run {{var2}}
+# Populate using metadata()
+```

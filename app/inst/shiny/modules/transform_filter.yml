@@ -1,0 +1,5 @@
+component: "transform"
+short_name: "Filter"
+long_name: "Filter the data"
+authors: "Simon Smart"
+package: []

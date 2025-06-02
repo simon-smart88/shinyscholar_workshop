@@ -1,0 +1,25 @@
+---
+title: "intro_tab"
+output: html_document
+---
+
+#### WORKFLOW
+
+*SSdemo* (v0.0.1) includes three components, or steps of a possible workflow. Each component includes one or more modules, which are possible analyses for that step.
+
+**Components:**  
+**1.** *Select data*
+- Upload your own data
+- Query a database to obtain data
+
+**2.** *Transform data*
+- Filter the data
+
+**3.** *Plot data*
+- Plot the data as a histogram
+- Plot the data as a scatterplot
+
+**4.** *Reproduce*
+- Download session code
+- Download dependencies
+- Download package references

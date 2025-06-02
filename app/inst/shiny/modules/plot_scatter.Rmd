@@ -1,0 +1,8 @@
+```{asis, echo = {{plot_scatter_knit}}, eval = {{plot_scatter_knit}}, include = {{plot_scatter_knit}}}
+Plots the data on a scatter plot
+```
+
+```{r, echo = {{plot_scatter_knit}}, include = {{plot_scatter_knit}}}
+scatterplot <- plot_scatter(raster, {{plot_scatter_sample}}, {{plot_scatter_axis}}, {{plot_scatter_name}})
+scatterplot()
+```

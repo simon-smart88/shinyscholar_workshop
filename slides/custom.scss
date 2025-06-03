@@ -105,3 +105,20 @@ font-size: 30px;
   max-width: unset !important;
   max-height: unset !important;
 }
+
+/*mermaid-diagrams*/
+/*input, server, output*/
+.sin > rect {
+    fill: #b5e9ec !important;
+}
+.sser > rect {
+    fill: #b5ecb6 !important;
+}
+.sout > rect {
+    fill: #d6b5ec !important;
+}
+
+.mermaid-js {
+  max-width: 500px !important;
+}
+

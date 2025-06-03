@@ -203,6 +203,20 @@ lines(seq(2012, 2023, 0.1), exp(predict(mod, data.frame(year = seq(2012, 2023, 0
 - Requires a lot of refactoring / unusual syntax
 - Unclear if it's suited to large apps
 
+```{r eval = FALSE, echo = TRUE }
+server <- function(input, output) {
+  var <- metaReactive({
+    cars[[..(input$var)]]
+  })
+  output$Summary <- metaRender(renderPrint, {
+    summary(..(var()))
+  })
+  output$code <- renderPrint({
+    expandChain(output$Summary())
+  })
+}
+```
+
 ## Wallace is an app for modelling species distributions
 <img src="images/wallace.png" class="centre_image" >
 
@@ -262,6 +276,12 @@ lines(seq(2012, 2023, 0.1), exp(predict(mod, data.frame(year = seq(2012, 2023, 0
 - New modules slot in easily
 - Explicit for developers where code is located
 
+## Overview of the live demo
+
+- The package contains an example app
+- We'll create a similar app and copy some of the modules
+- Then we'll develop a new module and go through each of the steps to develop it
+
 ## `create_template()` requires a dataframe of modules 
 
 ```{r eval = TRUE, echo = FALSE}
@@ -290,7 +310,7 @@ knitr::kable(modules, format = "html")
 
 ## `common` is an object passed between modules 
 
-- A shared environment for data
+- A shared environment for storing data
 - Avoids having to manually manage what data each module interacts with
 - Helps ensure consistent use of variable names
 - All set to `NULL` by default 
@@ -326,17 +346,18 @@ knitr::kable(modules, format = "html")
 :::
 
 
-## `create_template()` creates an empty app {.mediumcode}
+## `create_template()` creates an empty app 🚀 {.mediumcode}
+
 ```{r eval = FALSE, echo = TRUE}
 
 common_objects = c("raster", "histogram", "scatter")
 
 shinyscholar::create_template(
-  path = file.path("~", "Documents"), name = "demo", author = "Simon Smart",
+  path = file.path("~", "Documents"), name = "SSdemo", author = "Simon Smart",
   include_map = TRUE, include_table = TRUE, include_code = TRUE, 
   common_objects = common_objects, modules = modules, install = TRUE)
 
-demo::run_demo()
+SSdemo::run_SSdemo()
 ```
 
 
@@ -357,10 +378,10 @@ demo::run_demo()
 │       │   ├── core_load.R                                     Loads app
 │       │   ├── core_mapping.R                                  Creates map
 │       │   ├── core_save.R                                     Saves app
-│       │   ├── load_database.md                                Module guidance
-│       │   ├── load_database.R                                 Module UI and server
-│       │   ├── load_database.Rmd                               Reproduces the module
-│       │   ├── load_database.yml                               Module configuration
+│       │   ├── select_async.md                                 Module guidance
+│       │   ├── select_async.R                                  Module UI and server
+│       │   ├── select_async.Rmd                                Reproduces the module
+│       │   ├── select_async.yml                                Module configuration
 │       │   ├── ... (repeated for other modules)
 │       ├── Rmd
 │       │   ├── gtext_load.Rmd                                  Guidance text for each component
@@ -434,7 +455,7 @@ numericInput(ns("number"))
 - Shinyscholar takes care of all of these!
 :::
 
-## Modules in shinyscholar have a broader definition and several files {.verysmalltext}
+## Modules in shinyscholar have a broader definition and several files 🚀 {.verysmalltext}
 
 - In `R/`:
     -   Function: `<component>_<module>_f.R`
@@ -483,6 +504,37 @@ if (is.null(common$raster)) {
 
 <img src="images/workflow.svg" class="centre_image" >
 
+## Data flow in shiny vs shinyscholar
+
+::: columns
+::: {.column width="50%"}
+```{mermaid}
+flowchart TD
+A[Input in UI] --> |input$| B([Computation in server])
+B --> |output$| C(Output in UI)
+
+class A sin
+class B sser
+class C sout
+```
+:::
+::: {.column width="50%" .fragment .fade-in} 
+```{mermaid}
+flowchart TD
+A[Input in UI] --> |input$| C([Functions])
+B[Existing data] --> |common$| C([Functions])
+C --> |common$| D([Store in common])
+D --> |output$| E(Output in Results)
+
+class A sin
+class B sin
+class C sser
+class D sser
+class E sout
+```
+:::
+:::
+
 ## Developing the module function
 
 - Functions split the business logic from the shiny logic and enable reproducibility
@@ -490,7 +542,134 @@ if (is.null(common$raster)) {
 - Once it works, move it to the function file and document
 - Parameters should either be `common` objects or `input` values
 
-## Modules contain several functions {.mediumtext}
+## Functions should be written defensively
+
+- Check that inputs are correct and log any errors
+- May be not always be necessary when used in the app but we're also creating user-facing functions used in the rmarkdown
+- Catch any other errors and fail gracefully instead of crashing the app
+
+## The `select_query()` function in the example app is most complex 🚀
+
+```{r echo=TRUE, eval=FALSE}
+select_query <- function(poly, date, token, logger = NULL) {
+
+  check_suggests()
+
+  if (!("matrix" %in% class(poly))){
+    logger |> writeLog(type = "error","poly must be a matrix")
+    return()
+  }
+
+  if (!is.character(date) || is.na(as.Date(date, format = "%Y-%m-%d"))) {
+    logger |> writeLog(type = "error","date must be a string with the format YYYY-MM-DD")
+    return()
+  }
+
+  if (nchar(token) < 200 || is.null(token)){
+    logger |> writeLog(type = "error", "This function requires a NASA token - see the documentation")
+    return()
+  }
+
+  # convert to terra object to calculate area and extent
+  terra_poly <- terra::vect(poly, crs = "EPSG:4326", type = "polygons")
+  area <- terra::expanse(terra_poly, unit = "km")
+  if (area > 1000000) {
+    logger |> writeLog(type = "error", paste0("Your selected area is too large (",round(area,0)," km2)",
+                                              " when the maximum is 1m km2. Please select a smaller area"))
+    return()
+  }
+
+  bbox <- c(min(poly[,1]), max(poly[,2]), max(poly[,1]), min(poly[,2]))
+
+  search_url <- glue::glue("https://ladsweb.modaps.eosdis.nasa.gov/api/v2/content/archives?products=MCD15A2H&temporalRanges={date}&regions=[BBOX]W{bbox[1]}%20N{bbox[2]}%20E{bbox[3]}%20S{bbox[4]}&archiveSets=61")
+  check <- check_url(search_url)
+
+  if (!is.null(check)){
+    image_req <- httr2::request(search_url ) |>
+                  httr2::req_auth_bearer_token(token) |>
+                  httr2::req_perform()
+
+    image_resp <- image_req |> httr2::resp_body_html()
+
+    image_links <- xml2::xml_find_all(image_resp, "//a")
+    image_urls <- xml2::xml_attr(image_links, "href")
+  } else {
+    logger |> writeLog(type = "error", "The FAPAR API is currently offline")
+    return()
+  }
+
+  # download and stitch together tiles
+  raster <- NULL
+  for (file in image_urls){
+    if (tools::file_ext(file) == "hdf"){
+      req <- httr2::request(file) |>
+        httr2::req_auth_bearer_token(token) |>
+        httr2::req_perform()
+
+      temp <- tempfile(fileext = ".hdf")
+      writeBin(httr2::resp_body_raw(req), temp)
+
+      tile <- terra::rast(temp)$Fpar_500m
+      if (is.null(raster)){
+        raster <- tile
+      } else {
+        raster <- terra::merge(raster, tile)
+      }
+    }
+  }
+
+  if (is.null(raster)){
+    logger |> writeLog(type = "error", paste0("No data was found for your selected area. ",
+                                               "This could be due to cloud coverage or because the area is not over land."))
+    return()
+  }
+
+  # reproject and crop
+  raster <- terra::project(raster, "EPSG:4326")
+  raster <- terra::crop(raster, terra_poly)
+
+  # count missing values and log accordingly
+  missing_values <- length(terra::values(raster)[terra::values(raster) > 1])
+  urban <- length(terra::values(raster)[terra::values(raster) == 2.5])
+  water <- length(terra::values(raster)[terra::values(raster) == 2.54])
+
+  if (missing_values == terra::ncell(raster)) {
+    logger |> writeLog(type = "error", paste0("No data was found for your selected area. ",
+                                               "This could be due to cloud coverage or because the area is not over land."))
+    return()
+  }
+  if (missing_values > 0) {
+    message <- glue::glue("{missing_values} pixels were removed.")
+    if (urban > 0) {
+      message <- paste(message, glue::glue("{urban} pixels were removed due to urban land use."), sep = " ")
+    }
+    if (water > 0) {
+      message <- paste(message, glue::glue("{water} pixels were removed due to water coverage."), sep = " ")
+    }
+    logger |> writeLog(message)
+  }
+
+  # remove missing values and rescale data to 0 - 100 %
+  raster <- terra::clamp(raster, upper = 1, value = FALSE) * 100
+
+  raster
+}
+```
+
+## Unit testing {.mediumcode} 🚀
+
+- Each module should have unit tests and end-to-end tests
+- Unit test tests that the module function behaves as you expect
+- End-to-end tests check that the whole module works
+
+```{r echo = TRUE, eval = FALSE}
+test_that("Check select_user function works as expected", {
+  result <- select_user()
+  expect_true(is.null(result))
+})
+```
+
+## The shiny module contains several functions {.mediumtext}
 
 - `<identifier>_module_ui()` - user inputs
 - `<identifier>_module_server()` - server function
@@ -560,17 +739,123 @@ plot_hist_module_ui <- function(id) {
 output$hist <- renderPlot({
   watch("plot_hist")
   req(common$histogram)
-  plot(common$histogram, freq = FALSE, main = "", xlab = common$meta$plot_hist$name, ylab = "Frequency (%)")
+  common$histogram()
   })
 ```
 
-## Outputs are inserted into the results tab {.mediumcode}
+## Outputs are inserted into the results tab {.mediumcode} 🚀
+
+- The visible results are determined by the module currently selected
 
 ```{r echo = TRUE, eval = FALSE}
 plot_hist_module_result <- function(id) {
   ns <- NS(id)
   plotOutput(ns("hist"))
 }
+```
+
+## Saving and loading 
+
+- When the app is saved, `common` is saved to an `.Rds` 
+- Each module's input values are stored in `common$state`
+- Distinct from those stored in `common$meta` which are only for modules that have been run
+
+## Saving and loading
+
+- Loading reloads data into `common`
+- Input values are restored from `common$state`
+- Module outputs are retriggered from `names(common$meta)`
+
+## The ability to save is also helpful during development
+
+- If working on a feature that relies on results from a slow step, it can be tedious to rerun each time a change is made
+- We can load `common` in outside shiny and use the exact data used in the app
+- Set `load_file_path` to point to a save file and it will be loaded automatically 
+
+## `save_and_load()` takes care of tedious coding {.mediumcode} 🚀
+
+- Currently only default `{shiny}` inputs are supported
+
+```{r echo = TRUE, eval = FALSE}
+save_and_load(".") # for all modules
+save_and_load(".", module = "component_module") # for a single module
+
+numericInput(ns("number"), "Enter a number", value = 5)
+
+list(number = input$number) # save
+updateNumericInput(session, "number", state$number) # load
+```
+
+## Markdown files can be merged to replicate the analysis
+
+-   When a module is used an object becomes `TRUE`
+-   Input values are stored and *knitted* into the markdown
+-   Each chunk of the markdown calls the same function as the module in the app
+-   The chunks for used modules are combined into one `.Rmd` file
+
+## Input values are copied into the rmarkdown {.mediumcode}
+
+```{r eval = FALSE, echo = TRUE}
+#```{r, echo = {{select_query_knit}}, include = {{select_query_knit}}}
+poly <- {{select_query_poly}}
+token <- {{select_query_token}}
+ras <- select_query(poly, {{select_query_date}}, token)
+raster_name <- {{select_query_name}}
+#```
+```
+
+## To create a reproducible chunk {.mediumcode} 🚀
+
+```{r eval = FALSE, echo = TRUE}
+#```{r}
+poly <- structure(c(-0.871582, -0.871582, 0.322266, 0.322266, -0.871582, 
+                    42.136253, 43.421009, 43.421009, 42.136253, 42.136253), 
+                  dim = c(5L, 2L), dimnames = list(    NULL, c("longitude", "latitude")))
+token <- NULL
+raster <- select_query(poly, "2024-10-09", token)
+raster_name <- "FAPAR"
+#```
+```
+
+## You can also add data directly to the markdown {.mediumtext}
+
+- If the output of a module is a small dataframe (~ 1000 values) then you can insert the `common` object straight into the markdown
+- Especially useful if files are uploaded as that can't be reproduced automatically
+- Alternatively, download a `.zip` of data and load that in the markdown (example below)
+
+:::footer
+  - https://github.com/simon-smart88/disagapp/blob/main/inst/shiny/modules/rep_covs.R
+  - https://github.com/simon-smart88/disagapp/blob/main/inst/shiny/modules/rep_covs.Rmd
+  - https://github.com/simon-smart88/disagapp/blob/d7739ff034b2bf12760b54516a6d1f087e42b97c/inst/shiny/modules/rep_markdown.R#L77 
+
+:::
+
+## As for saving and loading, `metadata()` takes care of some of the tedium 🚀 {.mediumcode}
+
+- Unlike for `save_and_load()` this requires manual work afterwards and can therefore only be called once for each module
+
+```{r echo = TRUE, eval = FALSE}
+metadata(".") # for all modules
+metadata(".", module = "component_module") # for a single module
+
+numericInput(ns("number"), "Enter a number", value = 5)
+
+common$meta$component_module$number <- input$number # store
+component_module_number <- common$meta$component_module$number # transfer to Rmd
+{{component_module_number}} # use in Rmd
+```
+
+## End-to-end tests 🚀 {.mediumcode}
+
+```{r echo = TRUE, eval = FALSE}
+test_that("{shinytest2} recording: e2e_select_user", {
+  app <- shinytest2::AppDriver$new(app_dir = system.file("shiny", package = "demo"), name = "e2e_select_user")
+  app$set_inputs(tabs = "select")
+  app$set_inputs(selectSel = "select_user")
+  app$click("select_user-run")
+  common <- app$get_value(export = "common")
+  expect_true(is.null(common$scatter))
+})
 ```
 
 ## Asynchronous modules
@@ -612,121 +897,6 @@ plot_hist_module_result <- function(id) {
     } else {
       common$logger %>% writeLog(type = "error", result)
     }
-```
-
-## Saving and loading
-
-- When the app is saved, `common` is saved to an `.Rds` 
-- Each module's input values are stored in `common$state`
-- Distinct from those stored in `common$meta` which are only for modules that have been run
-
-## Saving and loading
-
-- Loading reloads data into `common`
-- Input values are restored from `common$state`
-- Module outputs are retriggered from `names(common$meta)`
-
-## The ability to save is also helpful during development
-
-- If working on a feature that relies on results from a slow step, it can be tedious to rerun each time a change is made
-- We can load `common` in an rmarkdown and use the exact data used in the app
-- Set `load_file_path` to point to a save file and it will be loaded automatically 
-
-## `save_and_load()` takes care of tedious coding {.mediumcode}
-
-- Currently only `{shiny}` inputs are supported
-
-```{r echo = TRUE, eval = FALSE}
-save_and_load(".") # for all modules
-save_and_load(".", module = "component_module") # for a single module
-
-numericInput(ns("number"), "Enter a number", value = 5)
-
-list(number = input$number) # save
-updateNumericInput(session, "number", state$number) # load
-```
-
-## Markdown files can be merged to replicate the analysis
-
--   When a module is used an object becomes `TRUE`
--   Input values are stored and *knitted* into the markdown
--   Each chunk of the markdown calls the same function as the module in the app
--   The chunks for used modules are combined into one `.Rmd` file
-
-## Input values are copied into the rmarkdown {.mediumcode}
-
-```{r eval = FALSE, echo = TRUE}
-#```{r, echo = {{select_query_knit}}, include = {{select_query_knit}}}
-poly <- {{select_query_poly}}
-token <- {{select_query_token}}
-ras <- select_query(poly, {{select_query_date}}, token)
-raster_name <- {{select_query_name}}
-#```
-```
-
-## To create a reproducible chunk {.mediumcode}
-
-```{r eval = FALSE, echo = TRUE}
-#```{r}
-poly <- matrix(c(-1.54202, -1.54202, -0.718279, -0.718279, -1.54202, 52.509368, 52.789309, 52.789309, 52.509368, 52.509368), ncol = 2, byrow = FALSE)
-token <- NULL
-ras <- select_query(poly, "2024-10-09", token)
-raster_name <- "FAPAR"
-#```
-```
-
-## You can also add data directly to the markdown {.mediumtext}
-
-- If the output of a module is a small dataframe (~ 1000 values) then you can insert the `common` object straight into the markdown
-- Especially useful if files are uploaded as that can't be reproduced automatically
-- Alternatively, download a `.zip` of data and load that in the markdown (example below)
-
-:::footer
-  - https://github.com/simon-smart88/disagapp/blob/main/inst/shiny/modules/rep_covs.R
-  - https://github.com/simon-smart88/disagapp/blob/main/inst/shiny/modules/rep_covs.Rmd
-  - https://github.com/simon-smart88/disagapp/blob/d7739ff034b2bf12760b54516a6d1f087e42b97c/inst/shiny/modules/rep_markdown.R#L77 
-
-:::
-
-## As for saving and loading, `metadata()` takes care of some of the tedium: {.mediumcode}
-
-- Unlike for `save_and_load()` this requires manual work afterwards and can therefore only be called once for each module
-
-```{r echo = TRUE, eval = FALSE}
-metadata(".") # for all modules
-metadata(".", module = "component_module") # for a single module
-
-numericInput(ns("number"), "Enter a number", value = 5)
-
-common$meta$component_module$number <- input$number # store
-component_module_number <- common$meta$component_module$number # transfer to Rmd
-{{component_module_number}} # use in Rmd
-```
-
-## Testing {.mediumcode}
-
-- Each module should have unit tests and end-to-end tests
-- Unit test tests that the module function behaves as you expect
-- End-to-end tests check that the whole module works
-
-```{r echo = TRUE, eval = FALSE}
-test_that("Check select_user function works as expected", {
-  result <- select_user()
-  expect_true(is.null(result))
-})
-```
-
-## End-to-end tests {.mediumcode}
-
-```{r echo = TRUE, eval = FALSE}
-test_that("{shinytest2} recording: e2e_select_user", {
-  app <- shinytest2::AppDriver$new(app_dir = system.file("shiny", package = "demo"), name = "e2e_select_user")
-  app$set_inputs(tabs = "select")
-  app$set_inputs(selectSel = "select_user")
-  app$click("select_user-run")
-  common <- app$get_value(export = "common")
-  expect_true(is.null(common$scatter))
-})
 ```
 
 ## Info and support

@@ -93,17 +93,16 @@ transform_filter <- function(x, logger = NULL){
   NULL
 }
 
-
 ```
 
 Write unit tests
 
 - raster needs to be a SpatRaster
-- min and max need to be numeric
+- lower and upper need to be numeric
 
 - Number of pixels shouldn't change
-- Max value = max
-- Min value = min
+- Max value = upper
+- Min value = lower
 
 ```{r}
 test_that("Check transform_filter function works as expected", {
@@ -203,18 +202,28 @@ Add metadata and save lines
 
 ```{r}
 # inside a project save_and_load(".", "transform_filter") would work
-save_and_load(file.path("~", "Documents", "SSdemo"), "transform_filter")
-metadata(file.path("~", "Documents", "SSdemo"), "transform_filter")
+shinyscholar::save_and_load(file.path("~", "Documents", "SSdemo"), "transform_filter")
+shinyscholar::metadata(file.path("~", "Documents", "SSdemo"), "transform_filter")
 
 ```
 
+Module configuration
+
+```{yaml}
+component: "transform"
+short_name: "Filter"
+long_name: "Filter the data"
+authors: "Simon Smart"
+package: []
+```
+
 Add a reproducible chunk
+(Copy after running `metadata()`)
 
 ```{r}
 
 
 ```
-
 
 End-to-end tests
 
@@ -227,9 +236,6 @@ test_that("{shinytest2} recording: e2e_transform_filter", {
   common <- app$get_value(export = "common")
   expect_true(is.null(common$scatter))
 })
-
-
-
 
 ```
 

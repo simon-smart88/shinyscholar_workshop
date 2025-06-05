@@ -408,17 +408,21 @@ Simon Smart
 </div>
 </div>
 
-  <p class="date">2025-06-07</p>
+  <p class="date">June 7, 2025</p>
 </section>
 <section id="overview" class="slide level2">
 <h2>Overview</h2>
 <ul>
-<li>What is Shiny?</li>
 <li>Use of Shiny in academia</li>
 <li>How Shinyscholar helps to avoid common problems</li>
 <li>How to use <code>create_template()</code> to make an app</li>
 <li>How to develop modules</li>
 </ul>
+<div class="fragment fade-in">
+<ul>
+<li>Please ask questions!</li>
+</ul>
+</div>
 </section>
 <section id="about-me" class="slide level2">
 <h2>About me</h2>
@@ -723,6 +727,7 @@ Simon Smart
 <section id="shinyscholar-enforces-a-strict-structure" class="slide level2">
 <h2>Shinyscholar enforces a strict structure</h2>
 <ul>
+<li>Structured as a package</li>
 <li>Analyses are split into components and modules</li>
 <li>Each module calls a function</li>
 <li>Each module is reproduced by a markdown chunk</li>
@@ -747,7 +752,7 @@ Simon Smart
 </section>
 <section id="create_template-requires-a-dataframe-of-modules" class="slide level2">
 <h2><code>create_template()</code> requires a dataframe of modules</h2>
-<div class="cell" data-val="true">
+<div class="cell">
 <div class="cell-output-display">
 <table class="caption-top" data-quarto-postprocess="true">
 <thead>
@@ -782,14 +787,26 @@ Simon Smart
 <td style="text-align: left;">Select data</td>
 <td style="text-align: left;">query</td>
 <td style="text-align: left;">Query a database to obtain data</td>
-<td style="text-align: left;">TRUE</td>
+<td style="text-align: left;">FALSE</td>
 <td style="text-align: left;">FALSE</td>
 <td style="text-align: left;">TRUE</td>
 <td style="text-align: left;">TRUE</td>
 <td style="text-align: left;">FALSE</td>
-<td style="text-align: left;">TRUE</td>
+<td style="text-align: left;">FALSE</td>
 </tr>
 <tr class="odd">
+<td style="text-align: left;">transform</td>
+<td style="text-align: left;">Transform data</td>
+<td style="text-align: left;">filter</td>
+<td style="text-align: left;">Filter the data</td>
+<td style="text-align: left;">TRUE</td>
+<td style="text-align: left;">TRUE</td>
+<td style="text-align: left;">TRUE</td>
+<td style="text-align: left;">TRUE</td>
+<td style="text-align: left;">TRUE</td>
+<td style="text-align: left;">FALSE</td>
+</tr>
+<tr class="even">
 <td style="text-align: left;">plot</td>
 <td style="text-align: left;">Plot data</td>
 <td style="text-align: left;">hist</td>
@@ -801,7 +818,7 @@ Simon Smart
 <td style="text-align: left;">TRUE</td>
 <td style="text-align: left;">FALSE</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;">plot</td>
 <td style="text-align: left;">Plot data</td>
 <td style="text-align: left;">scatter</td>
@@ -867,8 +884,7 @@ Simon Smart
 </div></div>
 </section>
 <section id="create_template-creates-an-empty-app" class="slide level2 mediumcode">
-<h2><code>create_template()</code> creates an empty app</h2>
-<p>🚀</p>
+<h2><code>create_template()</code> creates an empty app 🚀</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="" aria-hidden="true" tabindex="-1"></a>common_objects <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"raster"</span>, <span class="st">"histogram"</span>, <span class="st">"scatter"</span>)</span>
 <span id="cb2-2"><a href="" aria-hidden="true" tabindex="-1"></a></span>
@@ -923,8 +939,8 @@ Simon Smart
 ├── R
 │   ├── helper_functions.R                                      Various utility functions
 │   ├── run_demo.R                                              Function to run app
-│   ├── load_database_f.R                                       Function for each module
-│   ├── load_user_f.R
+│   ├── select_async_f.R                                        Function for each module
+│   ├── select_query_f.R
 │   ├── plot_histogram_f.R
 │   └── plot_scatter_f.R
 └── tests
@@ -978,7 +994,7 @@ Simon Smart
 </div>
 </section>
 <section id="modules-in-shinyscholar-have-a-broader-definition-and-several-files" class="slide level2 verysmalltext">
-<h2>Modules in shinyscholar have a broader definition and several files</h2>
+<h2>Modules in shinyscholar have a broader definition and several files 🚀</h2>
 <ul>
 <li>In <code>R/</code>:
 <ul>
@@ -1032,7 +1048,7 @@ Simon Smart
 <li>Each module’s identifier can be used to trigger events</li>
 <li><code>init(&lt;id&gt;)</code> is called during app start up</li>
 <li><code>trigger(&lt;id&gt;)</code> is called when a module runs successfully</li>
-<li><code>watch(&lt;id&gt;)</code> is used inside any outputs to be generated</li>
+<li><code>watch(&lt;id&gt;)</code> is used inside any outputs to be generated / other code that needs to run</li>
 </ul>
 </section>
 <section id="module-development-workflow" class="slide level2">
@@ -1104,7 +1120,7 @@ class E sout
 </ul>
 </section>
 <section id="the-select_query-function-in-the-example-app-is-most-complex" class="slide level2">
-<h2>The <code>select_query()</code> function in the example app is most complex</h2>
+<h2>The <code>select_query()</code> function in the example app is most complex 🚀</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="" aria-hidden="true" tabindex="-1"></a>select_query <span class="ot">&lt;-</span> <span class="cf">function</span>(poly, date, token, <span class="at">logger =</span> <span class="cn">NULL</span>) {</span>
 <span id="cb7-2"><a href="" aria-hidden="true" tabindex="-1"></a></span>
@@ -1211,8 +1227,8 @@ class E sout
 <span id="cb7-103"><a href="" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="unit-testing" class="slide level2 mediumcode">
-<h2>Unit testing</h2>
+<section id="unit-testing-.mediumcode" class="slide level2">
+<h2>Unit testing {.mediumcode} 🚀</h2>
 <ul>
 <li>Each module should have unit tests and end-to-end tests</li>
 <li>Unit test tests that the module function behaves as you expect</li>
@@ -1303,8 +1319,8 @@ class E sout
 <span id="cb11-5"><a href="" aria-hidden="true" tabindex="-1"></a>  })</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="outputs-are-inserted-into-the-results-tab" class="slide level2 mediumcode">
-<h2>Outputs are inserted into the results tab</h2>
+<section id="outputs-are-inserted-into-the-results-tab-.mediumcode" class="slide level2">
+<h2>Outputs are inserted into the results tab {.mediumcode} 🚀</h2>
 <ul>
 <li>The visible results are determined by the module currently selected</li>
 </ul>
@@ -1335,14 +1351,14 @@ class E sout
 <h2>The ability to save is also helpful during development</h2>
 <ul>
 <li>If working on a feature that relies on results from a slow step, it can be tedious to rerun each time a change is made</li>
-<li>We can load <code>common</code> in an rmarkdown and use the exact data used in the app</li>
+<li>We can load <code>common</code> in outside shiny and use the exact data used in the app</li>
 <li>Set <code>load_file_path</code> to point to a save file and it will be loaded automatically</li>
 </ul>
 </section>
-<section id="save_and_load-takes-care-of-tedious-coding" class="slide level2 mediumcode">
-<h2><code>save_and_load()</code> takes care of tedious coding</h2>
+<section id="save_and_load-takes-care-of-tedious-coding-.mediumcode" class="slide level2">
+<h2><code>save_and_load()</code> takes care of tedious coding {.mediumcode} 🚀</h2>
 <ul>
-<li>Currently only <code>{shiny}</code> inputs are supported</li>
+<li>Currently only default <code>{shiny}</code> inputs are supported</li>
 </ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">save_and_load</span>(<span class="st">"."</span>) <span class="co"># for all modules</span></span>
@@ -1374,15 +1390,15 @@ class E sout
 <span id="cb14-6"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co">#```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="to-create-a-reproducible-chunk" class="slide level2 mediumcode">
-<h2>To create a reproducible chunk</h2>
+<section id="to-create-a-reproducible-chunk-.mediumcode" class="slide level2">
+<h2>To create a reproducible chunk {.mediumcode} 🚀</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co">#```{r}</span></span>
 <span id="cb15-2"><a href="" aria-hidden="true" tabindex="-1"></a>poly <span class="ot">&lt;-</span> <span class="fu">structure</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.871582</span>, <span class="sc">-</span><span class="fl">0.871582</span>, <span class="fl">0.322266</span>, <span class="fl">0.322266</span>, <span class="sc">-</span><span class="fl">0.871582</span>, </span>
 <span id="cb15-3"><a href="" aria-hidden="true" tabindex="-1"></a>                    <span class="fl">42.136253</span>, <span class="fl">43.421009</span>, <span class="fl">43.421009</span>, <span class="fl">42.136253</span>, <span class="fl">42.136253</span>), </span>
 <span id="cb15-4"><a href="" aria-hidden="true" tabindex="-1"></a>                  <span class="at">dim =</span> <span class="fu">c</span>(<span class="dv">5</span>L, <span class="dv">2</span>L), <span class="at">dimnames =</span> <span class="fu">list</span>(    <span class="cn">NULL</span>, <span class="fu">c</span>(<span class="st">"longitude"</span>, <span class="st">"latitude"</span>)))</span>
 <span id="cb15-5"><a href="" aria-hidden="true" tabindex="-1"></a>token <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
-<span id="cb15-6"><a href="" aria-hidden="true" tabindex="-1"></a>ras <span class="ot">&lt;-</span> <span class="fu">select_query</span>(poly, <span class="st">"2024-10-09"</span>, token)</span>
+<span id="cb15-6"><a href="" aria-hidden="true" tabindex="-1"></a>raster <span class="ot">&lt;-</span> <span class="fu">select_query</span>(poly, <span class="st">"2024-10-09"</span>, token)</span>
 <span id="cb15-7"><a href="" aria-hidden="true" tabindex="-1"></a>raster_name <span class="ot">&lt;-</span> <span class="st">"FAPAR"</span></span>
 <span id="cb15-8"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co">#```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -1403,7 +1419,7 @@ class E sout
 </div>
 </section>
 <section id="as-for-saving-and-loading-metadata-takes-care-of-some-of-the-tedium" class="slide level2 mediumcode">
-<h2>As for saving and loading, <code>metadata()</code> takes care of some of the tedium:</h2>
+<h2>As for saving and loading, <code>metadata()</code> takes care of some of the tedium 🚀</h2>
 <ul>
 <li>Unlike for <code>save_and_load()</code> this requires manual work afterwards and can therefore only be called once for each module</li>
 </ul>
@@ -1419,7 +1435,7 @@ class E sout
 </div>
 </section>
 <section id="end-to-end-tests" class="slide level2 mediumcode">
-<h2>End-to-end tests</h2>
+<h2>End-to-end tests 🚀</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">test_that</span>(<span class="st">"{shinytest2} recording: e2e_select_user"</span>, {</span>
 <span id="cb17-2"><a href="" aria-hidden="true" tabindex="-1"></a>  app <span class="ot">&lt;-</span> shinytest2<span class="sc">::</span>AppDriver<span class="sc">$</span><span class="fu">new</span>(<span class="at">app_dir =</span> <span class="fu">system.file</span>(<span class="st">"shiny"</span>, <span class="at">package =</span> <span class="st">"demo"</span>), <span class="at">name =</span> <span class="st">"e2e_select_user"</span>)</span>

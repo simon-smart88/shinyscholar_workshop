@@ -13,16 +13,20 @@ format:
     scale: true
     slide-number: true
 date: "7 June 2025"
+date-format: long
 preload-iframes: false
 ---
 
 ## Overview
 
--   What is Shiny?
 -   Use of Shiny in academia
 -   How Shinyscholar helps to avoid common problems
 -   How to use `create_template()` to make an app
 -   How to develop modules
+
+::: {.fragment .fade-in}
+-   Please ask questions!
+:::
 
 ## About me
 
@@ -253,9 +257,9 @@ server <- function(input, output) {
 - Updated UI
 - Viewing source code
 - Running async tasks
-- End-to-end testing with {shinytest2}
+- End-to-end testing with `{shinytest2}`
 - Simplified reproducibility
-- Long-term reproducibility via {renv}
+- Long-term reproducibility via `{renv}`
 - Automated tedious coding
 
 ## Installation
@@ -265,6 +269,7 @@ server <- function(input, output) {
 
 ## Shinyscholar enforces a strict structure
 
+-   Structured as a package
 -   Analyses are split into components and modules
 -   Each module calls a function
 -   Each module is reproduced by a markdown chunk
@@ -272,6 +277,7 @@ server <- function(input, output) {
 
 ## This structure has various advantages
 
+- Install in a single command
 - Modules are self-contained
 - New modules slot in easily
 - Explicit for developers where code is located
@@ -287,21 +293,21 @@ server <- function(input, output) {
 ```{r eval = TRUE, echo = FALSE}
 
 modules <- data.frame(
-"component" = c("select", "select", "plot", "plot"),
-"long_component" = c("Select data", "Select data", "Plot data", "Plot data"),
-"module" = c("async", "query", "hist", "scatter"),
-"long_module" = c("Upload your own data", "Query a database to obtain data",
-                  "Plot the data as a histogram", "Plot the data as a scatterplot"),
-"map" = c(TRUE, TRUE, FALSE, FALSE),
-"result" = c(FALSE, FALSE, TRUE, TRUE),
-"rmd" = c(TRUE, TRUE, TRUE, TRUE),
-"save" = c(TRUE, TRUE, TRUE, TRUE),
-"download" = c(FALSE, FALSE, TRUE, TRUE),
-"async" = c(TRUE, TRUE, FALSE, FALSE))
+  "component" = c("select", "select", "transform", "plot", "plot"),
+  "long_component" = c("Select data", "Select data", "Transform data", "Plot data", "Plot data"),
+  "module" = c("async", "query", "filter", "hist", "scatter"),
+  "long_module" = c("Upload your own data", "Query a database to obtain data", "Filter the data",
+                    "Plot the data as a histogram", "Plot the data as a scatterplot"),
+  "map" = c(TRUE, FALSE, TRUE, FALSE, FALSE),
+  "result" = c(FALSE, FALSE, TRUE, TRUE, TRUE),
+  "rmd" = c(TRUE, TRUE, TRUE, TRUE, TRUE),
+  "save" = c(TRUE, TRUE, TRUE, TRUE, TRUE),
+  "download" = c(FALSE, FALSE, TRUE, TRUE, TRUE),
+  "async" = c(TRUE, FALSE, FALSE, FALSE, FALSE))
 
 ```
 
-```{r val = TRUE, echo = FALSE}
+```{r eval = TRUE, echo = FALSE}
 knitr::kable(modules, format = "html")
 ```
 
@@ -405,8 +411,8 @@ SSdemo::run_SSdemo()
 ├── R
 │   ├── helper_functions.R                                      Various utility functions
 │   ├── run_demo.R                                              Function to run app
-│   ├── load_database_f.R                                       Function for each module
-│   ├── load_user_f.R
+│   ├── select_async_f.R                                        Function for each module
+│   ├── select_query_f.R
 │   ├── plot_histogram_f.R
 │   └── plot_scatter_f.R
 └── tests
@@ -498,7 +504,7 @@ if (is.null(common$raster)) {
 - Each module's identifier can be used to trigger events
 - `init(<id>)` is called during app start up
 - `trigger(<id>)` is called when a module runs successfully
-- `watch(<id>)` is used inside any outputs to be generated
+- `watch(<id>)` is used inside any outputs to be generated / other code that needs to run
 
 ## Module development workflow
 
